@@ -1,8 +1,30 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>
-      Tab 2
+    <ion-buttons slot="start">
+      <ion-button>
+        <ion-icon slot="icon-only" name="wallet-outline"></ion-icon>
+      </ion-button>
+
+      <ion-button (click)="changeMonth('prev')">
+        <ion-icon slot="icon-only" name="caret-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    
+    <ion-title (click)="changeMonth('today')">
+      <!-- <ion-button > -->
+        {{getMonth()}}
+      <!-- </ion-button> -->
     </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button  (click)="changeMonth('next')">
+        <ion-icon slot="icon-only" name="caret-forward"></ion-icon>
+      </ion-button>
+
+      <ion-button>
+        <ion-icon slot="icon-only" name="person"></ion-icon>
+    </ion-button>
+  </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -13,5 +35,57 @@
     </ion-toolbar>
   </ion-header>
 
-  <app-explore-container name="Tab 2 page"></app-explore-container>
+  <!-- <app-explore-container name="Tab 2 page"></app-explore-container> -->
 </ion-content>
+
+<ion-footer>
+  <!-- <div *ngIf="log.length > 0 && showLastLog">
+    <ion-button expand="full" fill="outline" color="teal" (click)="showLastLog=false">Last Transaction</ion-button>
+    <ion-item>
+      <ion-badge slot="start" color="neon">{{log[0].date}}</ion-badge>
+      <ion-label> {{log[0].desc}} </ion-label> 
+      <span *ngIf="log[0].profit" style="color:green"> + ${{log[0].amt | number:'1.2-2'}} </span>
+      <span *ngIf="!log[0].profit" style="color:red"> - ${{log[0].amt | number:'1.2-2'}} </span>
+    </ion-item>
+  </div> -->
+  <!-- <div> -->
+    <!-- <ion-button fill="outline" id="b">Add $</ion-button>
+    <ion-button expand="round" fill="outline" color="neon"><ion-icon size="large" name="wallet-outline"></ion-icon></ion-button>
+    <ion-button fill="outline" id="b">Spend $</ion-button> -->
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-button (click)="updateMailStatus('close')">
+          <ion-icon slot="icon-only" name="chatbubble-ellipses"></ion-icon>
+        </ion-button>
+        <ion-button (click)="updateMailStatus('unread')">
+          <ion-icon slot="icon-only" name="game-controller"></ion-icon>
+        </ion-button>
+        <ion-button (click)="updateMailStatus('unread')">
+          <ion-icon slot="icon-only" name="medal"></ion-icon>
+        </ion-button>
+        <ion-button (click)="updateMailStatus('toogle')">
+          <ion-icon slot="icon-only" name={{mailStatus}}></ion-icon>
+        </ion-button>
+      </ion-buttons>
+
+      <div id="toolbar" (click)="changeDate()">
+        {{getDate()}}
+      </div>
+  
+      <ion-buttons slot="end">
+        <ion-button (click)="presentToast()">
+          <ion-icon slot="icon-only" name="airplane"></ion-icon>
+        </ion-button>
+        <ion-button>
+          <ion-icon slot="icon-only" name="earth"></ion-icon>
+        </ion-button>
+        <ion-button (click)="changeLanguage()">
+          <ion-icon slot="icon-only" name="language"></ion-icon>
+        </ion-button>
+        <ion-button>
+          <ion-icon slot="icon-only" name="information-circle"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar> 
+  <!-- </div> -->
+</ion-footer>
