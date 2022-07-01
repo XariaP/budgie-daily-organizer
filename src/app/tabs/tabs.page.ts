@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { LanguagesService } from '../services/languages.service';
 
 @Component({
   selector: 'app-tabs',
@@ -7,6 +8,11 @@ import { Component } from '@angular/core';
 })
 export class TabsPage {
 
-  constructor() {}
+  constructor(public language: LanguagesService) {
 
+  }
+
+  getLabel(name){
+    return this.language.getLabel(name);
+  }
 }

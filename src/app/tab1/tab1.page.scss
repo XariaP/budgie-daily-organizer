@@ -1,0 +1,33 @@
+ion-content {
+    --background: linear-gradient(150deg, rgb(244, 210, 130), rgb(250, 204, 111), rgb(239, 177, 85));
+}
+
+ion-toolbar{
+    --background: rgba(237, 124, 38, 0.449);
+    color: white;
+    text-align: center;
+}
+
+// #toolbar{
+//     color: rgba(237, 124, 38, 0.449);
+// }
+
+// ion-content {
+//     --background: linear-gradient(150deg, rgb(245, 249, 191), rgb(242, 238, 135), rgb(249, 243, 87));
+// }
+
+// ion-toolbar{
+//     --background: rgba(182, 167, 72, 0.449);
+//     color: white;
+//     text-align: center;
+// }
+
+// ion-content {
+//     --background: linear-gradient(150deg, rgb(249, 191, 191), rgb(242, 135, 178), rgb(249, 87, 146));
+// }
+
+// ion-toolbar{
+//     --background: rgba(220, 62, 152, 0.449);
+//     color: white;
+//     text-align: center;
+// }

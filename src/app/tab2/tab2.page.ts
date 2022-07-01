@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ToastController } from '@ionic/angular';
-import { async } from 'rxjs';
+import { LanguagesService } from '../services/languages.service';
 
 @Component({
   selector: 'app-tab2',
@@ -8,7 +8,7 @@ import { async } from 'rxjs';
   styleUrls: ['tab2.page.scss']
 })
 export class Tab2Page {
-  constructor(public toastController: ToastController) {
+  constructor(public toastController: ToastController, public language: LanguagesService) {
     this.date = new Date();
     this.date.setDate(1);
     this.exactdate = new Date();
@@ -17,39 +17,24 @@ export class Tab2Page {
   date: any;
   exactdate: any;
 
-  languages = {current: 'en', index: 0,
-                list: ['en', 'ko', 'ja', 'de', 'fr' ]};
-  
   getMonth(){
-    // var options = {month: 'long', day: 'numeric', year: 'numeric', weekday: 'long'};
     var options = {month: 'long', year: 'numeric'};
-    var lang = this.languages.current;
-    return this.date.toLocaleString(lang, options);
+    return this.getDateString(this.date, options);
   }
 
   getDate(){
     var options = {month: 'short', day: 'numeric', weekday: 'short'};
-    var lang = this.languages.current;
-    return this.exactdate.toLocaleString(lang, options);
+    return this.getDateString(this.exactdate, options);
+  }
+
+  getDateString(date, options){
+    var lang = this.language.myLanguage.code;
+    return date.toLocaleString(lang, options);
   }
 
   changeDate(){
     this.exactdate.setMonth(this.exactdate.getMonth() + 1);
     this.exactdate.setDate(this.exactdate.getDate() + 10);
-    }
-
-
-  changeLanguage(){ //lang
-    var langList = this.languages.list;
-    var index = this.languages.index;
-
-    if (index == langList.length - 1)
-      index = 0;
-    else
-      index++;
-    
-    this.languages.current = langList[index];
-    this.languages.index = index;
   }
 
   changeMonth(direction: string){
@@ -67,6 +52,7 @@ export class Tab2Page {
       case 'today':
         var today = new Date;
         this.date.setMonth(today.getMonth())
+        this.exactdate = new Date();
         break;
 
       default:

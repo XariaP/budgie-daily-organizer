@@ -1,37 +1,9 @@
 ion-content {
-    // --background: linear-gradient(150deg, lightgreen, rgb(16, 143, 16), darkgreen);
     --background: linear-gradient(150deg, lightgreen, rgb(171, 230, 171), rgb(210, 242, 210));
 }
 
-#menu {
-    --background: white;
-    // margin: auto;
-}
-
-// #b{
-//     width: 30%;
-//     // color: var(--ion-color-light);
-// }
-
-#toolbar{
-    text-align: center;
-    color: white;
-}
-
-ion-button{
-    color: white;
-}
-
-ion-footer ion-toolbar{
-    --background: rgba(24, 169, 164, 0.449);
-}
-
-ion-header ion-toolbar{
+ion-toolbar{
     --background: rgba(24, 169, 164, 0.449);
     color: white;
     text-align: center;
 }
-
-// ion-header ion-toolbar ion-buttons ion-button{
-//     color: var(--ion-color-primary);
-// }
