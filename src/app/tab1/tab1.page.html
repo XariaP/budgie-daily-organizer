@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button>
+      <ion-button (click)="addItem()">
         <ion-icon slot="icon-only" name="bag-add"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -9,8 +9,10 @@
       {{getLabel('tab1')}}
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button>
-        <ion-icon slot="icon-only" name="bag-remove"></ion-icon>
+      <ion-button (click)="setEdit()">
+        <!-- fix next 2 lines -->
+        <ion-icon *ngIf="edit" slot="icon-only" name="bag-check"></ion-icon>
+        <ion-icon *ngIf="!edit" slot="icon-only" name="bag-remove"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -24,17 +26,40 @@
   </ion-header>
 
   <ion-card *ngFor="let item of list1">
-    <ion-item lines="none" (click)="selectItem(item)">
+    <ion-item lines="none" (click)="selectItem(item, edit)">
       <!-- <ion-chip color={{item.color}}> 2 </ion-chip> -->
       <ion-buttons>
         <ion-button color={{checkSelected(item)}}><ion-icon name={{item.icon}} slot="icon-only"> </ion-icon></ion-button>
       </ion-buttons>
       <ion-label> {{item.itemName}} </ion-label>
       <ion-chip color={{item.color}}> {{item.category}} </ion-chip>
-<!--  <ion-buttons>
-        <ion-button><ion-icon color="danger" name="bag-remove" slot="icon-only"></ion-icon></ion-button>
-      </ion-buttons> -->
+      
+      <ion-buttons *ngIf="edit">
+        <ion-button (click)="removeItem(item)">
+          <ion-icon color="danger" name="bag-remove" slot="icon-only"></ion-icon>
+        </ion-button>
+      </ion-buttons>
     </ion-item>
+
+    <div *ngIf="checkEditItem(item)">
+      <ion-item color="light">
+        <ion-label position="fixed">Item Name</ion-label>
+        <ion-input [(ngModel)]="item.itemName" clearInput placeholder="Water"></ion-input>
+      </ion-item>
+      <ion-item color="light">
+        <ion-label position="fixed">Icon</ion-label>
+        <ion-input [(ngModel)]="item.icon" clearInput placeholder="cafe"></ion-input>
+      </ion-item>
+      <ion-item color="light">
+        <ion-label position="fixed">Colour</ion-label>
+        <ion-input [(ngModel)]="item.color" clearInput placeholder="secondary"></ion-input>
+      </ion-item>
+      <ion-item color="light">
+        <ion-label position="fixed">Category</ion-label>
+        <ion-input [(ngModel)]="item.category" clearInput placeholder="Necessities"></ion-input>
+      </ion-item>
+    </div>
+
   </ion-card>
 
   <!-- <ion-item color="dark" lines="none">
@@ -56,26 +81,16 @@
   <ion-fab vertical="bottom" horizontal="center" edge slot="fixed">
     <ion-fab-button color="dark" [routerLink]="['/profile']">
       <ion-icon name="person"></ion-icon>
+      <img src={{getAvatar()}}>
     </ion-fab-button>
-    <!-- <ion-fab-list side="start">
-      <ion-fab-button>
-        <ion-icon name="logo-facebook"></ion-icon>
-      </ion-fab-button>
-      <ion-fab-button>
-        <ion-icon name="logo-twitter"></ion-icon>
-      </ion-fab-button>
-      <ion-fab-button>
-        <ion-icon name="logo-youtube"></ion-icon>
-      </ion-fab-button>
-    </ion-fab-list> -->
   </ion-fab>
 </ion-content>
 
 <ion-footer>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button>
-        <ion-icon slot="icon-only" name="restaurant"></ion-icon>
+      <ion-button (click)="checkOut()">
+        <ion-icon slot="icon-only" name="basket"></ion-icon>
       </ion-button>
       <!-- <ion-button>
         <ion-icon slot="icon-only" name="subway"></ion-icon>
@@ -83,9 +98,9 @@
     </ion-buttons>
 
     <ion-buttons slot="end">
-      <!-- <ion-button>
-        <ion-icon slot="icon-only" name="basket"></ion-icon>
-      </ion-button> -->
+      <!-- <ion-button> -->
+        <!-- <ion-icon slot="icon-only" name="restaurant"></ion-icon> -->
+      <!-- </ion-button> -->
       <ion-button>
         <ion-icon slot="icon-only" name="information-circle"></ion-icon>
       </ion-button>
