@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 import { LanguagesService } from '../services/languages.service';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-tab2',
@@ -8,7 +9,7 @@ import { LanguagesService } from '../services/languages.service';
   styleUrls: ['tab2.page.scss']
 })
 export class Tab2Page {
-  constructor(public toastController: ToastController, public language: LanguagesService) {
+  constructor(public toastController: ToastController, public language: LanguagesService, public user: UserService) {
     this.date = new Date();
     this.date.setDate(1);
     this.exactdate = new Date();
@@ -22,8 +23,19 @@ export class Tab2Page {
     return this.getDateString(this.date, options);
   }
 
-  getDate(){
-    var options = {month: 'short', day: 'numeric', weekday: 'short'};
+  getDate(opt){
+    // var options = {month: 'short', day: 'numeric', weekday: 'short'};
+    var options;
+    switch(opt){
+      case 'weekday':
+        options = {weekday: 'long'};
+        break;
+      case 'date':
+        options = {month: 'long', day: 'numeric'};
+        break;
+      default:
+        options = {month: 'short', day: 'numeric', weekday: 'short'};
+    }
     return this.getDateString(this.exactdate, options);
   }
 
@@ -83,5 +95,9 @@ export class Tab2Page {
       position: 'middle'
     });
     toast.present();
+  }
+
+  getAvatar(){
+    return this.user.getAvatar();
   }
 }

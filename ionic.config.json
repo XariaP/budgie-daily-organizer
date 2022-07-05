@@ -1,7 +1,8 @@
 {
   "name": "Budgie",
   "integrations": {
-    "capacitor": {}
+    "capacitor": {},
+    "cordova": {}
   },
   "type": "angular",
   "id": "d319aad7"

@@ -7,7 +7,7 @@
     </ion-buttons>
     <ion-title>{{getLabel('profile')}}</ion-title>
     <ion-buttons slot="end">
-      <ion-button>
+      <ion-button (click)="toggleDarkTheme(false)">
         <ion-icon slot="icon-only" name="save"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -42,27 +42,30 @@
     </ion-avatar> -->
     <!-- <ion-label>Xaria Adjoa Kianna Prempeh</ion-label>
   </ion-item> -->
-  
-  <ion-avatar style="height: 200px; width:200px; margin:auto">
-    <img src="../../assets/icon.png">
+  <br>
+  <ion-avatar (click)="changeAvatar()" style="height: 200px; width:200px; margin:auto">
+    <img src={{getAvatar()}}>
     <!-- <ion-icon style="height: 200px; width:200px; background-color: white; border-radius: 50%;" color="secondary" name="ice-cream-outline"></ion-icon> -->
   </ion-avatar>
+  <br>
   <div align="center">
     <ion-chip color="light"> Xaria Adjoa Kianna Prempeh </ion-chip>
     <br>
-    <ion-chip color="light"> Age: 21 </ion-chip>
-    <ion-chip color="light"> Birthday: July 2nd, 2022 </ion-chip>
-    <br>
+    <ion-chip color="light"> {{getLabel("age")}}: 21 </ion-chip>
+    <ion-chip color="light"> {{getLabel("bday")}}: July 2nd, 2022 </ion-chip>
+    <!-- <br>
     <ion-chip color="light"> +1 246 282 0462 🇧🇧 </ion-chip>
-    <ion-chip color="light"> +1 437 247 4802 🇨🇦 </ion-chip>
-    <br>
+    <ion-chip color="light"> +1 437 247 4802 🇨🇦 </ion-chip> -->
+    <!-- <br>
     <ion-chip color="light"> xakp2001@outlook.com </ion-chip>
     <ion-chip color="light"> xprempeh@gmail.com </ion-chip>
-    <ion-chip color="light"> xariaprempeh@hotmail.com </ion-chip>
+    <ion-chip color="light"> xariaprempeh@hotmail.com </ion-chip> -->
+    <br>
+    <ion-button color="medium"> <ion-icon name="add"> </ion-icon></ion-button>
   </div>
 
   <ion-fab vertical="bottom" horizontal="center" edge slot="fixed">
-    <ion-fab-button color="dark" (click)="exit()">
+    <ion-fab-button color="medium" (click)="exit()">
       <ion-icon name="arrow-undo"></ion-icon>
     </ion-fab-button>
   </ion-fab>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { LanguagesService } from '../services/languages.service';
 import { LocationStrategy } from '@angular/common';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-profile',
@@ -9,13 +10,25 @@ import { LocationStrategy } from '@angular/common';
 })
 export class ProfilePage implements OnInit {
 
-  constructor(public language: LanguagesService, public location: LocationStrategy) { }
+  constructor(public language: LanguagesService, public location: LocationStrategy, public user: UserService) { }
 
   ngOnInit() {
+    // const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+
+    // // Add or remove the "dark" class based on if the media query matches
+    // function toggleDarkTheme(shouldAdd) {
+    //   document.body.classList.toggle('dark', shouldAdd);
+    // }
+    
+    // toggleDarkTheme(prefersDark.matches);
+
+    // // Listen for changes to the prefers-color-scheme media query
+    // prefersDark.addListener((mediaQuery) => toggleDarkTheme(mediaQuery.matches));
   }
 
   changeLanguage(){
-    this.language.changeLanguage(-1);
+    this.language.presentLanguageOptionsAlert();
+    // this.language.changeLanguage(choiceIndex);
   }
 
   getLabel(name){
@@ -24,5 +37,16 @@ export class ProfilePage implements OnInit {
 
   exit(){
     this.location.historyGo(-1);
+  }
+
+  getAvatar(){
+    var avatarPic = this.user.getAvatar();
+    if (avatarPic == "")
+      avatarPic = "../../assets/" + this.user.photos[0];
+    return avatarPic;
+  }
+
+  changeAvatar(){
+    this.user.changeAvatar();
   }
 }
