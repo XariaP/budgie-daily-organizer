@@ -15,7 +15,6 @@ export class UserService {
   photos = [
     // "mafumafu-1.png",
     // "dessert-7.jpg",
-    "",
     "pet-1.jpg",
     "room-1.jpg",
     "room-2.jpg",
