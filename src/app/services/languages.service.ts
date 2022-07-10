@@ -24,6 +24,18 @@ export class LanguagesService {
     {
       i: 0,
       tab1: "Shopping List",
+      // tab1Content: {
+      //   all: "All",
+      //   newList: "New List",
+      //   listInfo: "List Information",
+      //   itemName: "Item Name",
+      //   newItem: "New Item",
+      //   items: "Item(s)",
+      //   name: "Name",
+      //   delete: "Delete",
+      //   save: "Save",
+      //   list: "List",
+      // },
       tab2: "Monthly Budget",
       tab3: "Calculator",
       profile: "Profile",

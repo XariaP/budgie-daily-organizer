@@ -44,7 +44,9 @@ export class Tab1Page {
 
   addList(){
     this.show = this.categories.length;
-    this.categories.push({name: "", quantity: 0});
+    var categoryID = this.categories.length;
+    // this.categories.push({name: "", quantity: 0});
+    this.categories.push({name: "List " + categoryID, quantity: 0});
     this.editList(this.show);
   }
 
@@ -199,6 +201,15 @@ export class Tab1Page {
     }
     else{ //mark as obtained
       item.selected = !item.selected;
+      
+      if (item.selected){
+        this.list1.push(item);
+        this.list1.splice(this.list1.indexOf(item), 1);
+      }
+      else{
+        this.list1.splice(this.list1.indexOf(item), 1);
+        this.list1.splice(0, 0, item);
+      }
     }
   }
 
@@ -253,8 +264,8 @@ export class Tab1Page {
           var tempList = this.list1;
           for (var i = 0; i < tempList.length; i++){
               if (tempList[i] == item){
-                this.list1.splice(i, 1);
                 this.categories[this.list1[i].categoryID].quantity--;
+                this.list1.splice(i, 1);
                 break;
               }
           }
