@@ -7,3 +7,32 @@ ion-toolbar{
     color: white;
     text-align: center;
 }
+
+.bar{
+    --background: rgba(24, 169, 164, 0.449);
+    color: white;
+    text-align: center;
+    // border-color: aquamarine;
+}
+
+ion-chip{
+    margin: auto;
+    color: white;
+    ion-icon{
+        color: white;
+    }
+}
+
+// ion-button{
+//     color: teal;
+// }
+
+ion-chip.underlimit{
+    // color: aqua;
+    background-color: rgba(0, 128, 0, 0.693);
+}
+
+ion-chip.overlimit{
+    // color: aqua;
+    background-color: rgba(128, 0, 0, 0.693);
+}

@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
+import { AlertController } from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  constructor() {
+  constructor(public alertController: AlertController) {
     // this.avatarPic = "../../assets/icon.png";
   }
 
@@ -34,5 +35,17 @@ export class UserService {
     if (this.currentAvatarIndex == this.photos.length)
       this.currentAvatarIndex = 0;
     this.avatarPic = path + this.photos[this.currentAvatarIndex];
+  }
+
+  async presentAlert(alertInfo){
+    const alert = await this.alertController.create({
+      header: alertInfo.header,
+      subHeader: alertInfo.subHeader,
+      buttons: alertInfo.buttons,
+      inputs: alertInfo.inputs,
+      cssClass: 'custom-alert',
+    });
+
+    await alert.present();
   }
 }

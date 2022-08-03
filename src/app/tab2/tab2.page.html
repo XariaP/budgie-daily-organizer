@@ -25,6 +25,286 @@
     </ion-toolbar>
   </ion-header>
   <!-- <app-explore-container name="Tab 2 page"></app-explore-container> -->
+  
+  <!-- Segment with default selection -->
+  <ion-segment (ionChange)="segmentChanged($event)" value="home">
+    <ion-segment-button value="funds">
+      <ion-icon name="cash-outline"></ion-icon>
+      <!-- <ion-label>Funds</ion-label> -->
+    </ion-segment-button>
+    <ion-segment-button value="home">
+      <ion-icon name="home-outline"></ion-icon>
+    </ion-segment-button>
+    <ion-segment-button value="limits">
+      <ion-icon name="card-outline"></ion-icon>
+      <!-- <ion-label>Limits</ion-label> -->
+    </ion-segment-button>
+  </ion-segment>
+  
+  <div *ngIf="segment=='home' || segment=='funds'">
+    
+    <div *ngIf="segment=='funds'">
+      <ion-item class="bar" lines="none">
+        <ion-chip (click)="deductSpending()">
+          Spend
+          <ion-icon name="remove"></ion-icon>
+        </ion-chip>
+
+        <ion-chip (click)="addSavings()">
+          Deposit
+          <ion-icon name="add"></ion-icon>
+        </ion-chip>
+
+        <ion-chip (click)="transferFunds()">
+          Transfer
+          <ion-icon name="send"></ion-icon>
+        </ion-chip>
+      </ion-item>
+    </div>
+
+    <div *ngIf="segment=='home'" lines="none">
+      <ion-item class="bar">
+        <ion-chip (click)="projectLimits = !projectLimits">
+          <span *ngIf="!projectLimits"> Show Projected Values </span>
+          <span *ngIf="projectLimits"> Hide Projected Values </span>
+        </ion-chip>
+      </ion-item>
+    </div>
+    
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-card style="width: 100%; margin:auto">
+            <!-- <ion-item>Spending</ion-item> -->
+            <ion-button expand="full" fill="outline" (click)="addSpending()">Spending</ion-button>
+            <!-- clear outline solid -->
+            <ion-item> <ion-label>$</ion-label>
+              <span *ngIf="!projectLimits"> {{getAmt(mySpending)}} </span>
+              <span *ngIf="projectLimits"> {{showProjection()}} </span>
+            </ion-item>
+          </ion-card>
+        </ion-col>
+        <ion-col>
+          <ion-card style="width: 100%; margin: auto;">
+            <!-- <ion-item>Savings</ion-item> -->
+            <ion-button expand="full" fill="outline" (click)="addSavings()">Savings</ion-button>
+            <ion-item><ion-label>$</ion-label>
+              {{getAmt(mySavings)}}
+            </ion-item>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    
+    <div *ngIf="segment=='funds'">
+      <div style="text-align: center;">
+        <ion-button style="width: 100px;" (click)="setTransferAmt()" color="light">
+          <div *ngIf="transferDirection == 'SaveSpend'"> + $ </div>
+          <div *ngIf="transferDirection == 'SpendSave'"> - $ </div>
+          {{getAmt(transferAmt)}}
+        </ion-button> 
+        <ion-button class="bar" (click)="changeTransferDirection()">
+          <ion-icon name="{{transferIcon}}"></ion-icon>
+        </ion-button>
+        <ion-button style="width: 100px;" (click)="setTransferAmt()" color="light">
+          <div *ngIf="transferDirection == 'SaveSpend'"> - $ </div>
+          <div *ngIf="transferDirection == 'SpendSave'"> + $ </div>
+          {{getAmt(transferAmt)}}
+        </ion-button>
+      </div>
+
+      <ion-button expand="full" fill="clear" *ngIf="canTransfer" color="dark">
+      Tap to change transfer amount
+      </ion-button>
+      <ion-button expand="full" fill="clear" *ngIf="!canTransfer" color="danger" (click)="canTransfer=true">
+        Insufficient funds for transfer!
+      </ion-button>
+    </div>
+
+    <div *ngIf="segment=='home'">
+      <!-- <ion-button class="bar" expand="full" (click)="projectLimits = !projectLimits">
+        <span *ngIf="!projectLimits"> Show Projected Values </span>
+        <span *ngIf="projectLimits"> Hide Projected Values </span>
+      </ion-button>     -->
+      <!-- <br> -->
+      <ion-item class="bar" lines="none">
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <div></div>
+            </ion-col>
+            <ion-col>
+              <div>Spent</div>
+            </ion-col>
+            <ion-col>
+              <div>Limit</div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+
+      <ion-item class="bar" lines="none">
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <div>Total</div>
+            </ion-col>
+            <ion-col>
+              <div>${{sumSpent()}}</div>
+            </ion-col>
+            <ion-col>
+              <div>${{sumLimit()}}</div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+    </div>
+    
+
+    <!-- <div style="text-align: center; background-color: rgba(127, 255, 212, 0.23); border: green solid 1px;">
+      <ion-button>1</ion-button>
+      <ion-button>2</ion-button>
+      <ion-button>3</ion-button>
+      <br>
+      <ion-button>4</ion-button>
+      <ion-button>5</ion-button>
+      <ion-button>6</ion-button>
+      <br>
+      <ion-button>7</ion-button>
+      <ion-button>8</ion-button>
+      <ion-button>9</ion-button>
+      <br>
+      <ion-button>c</ion-button>
+      <ion-button>0</ion-button>
+      <ion-button>.</ion-button>
+    </div> -->
+  </div>
+
+  <!-- <ion-button expand="full" fill="outline" color="dark">Projections</ion-button> -->
+  <!-- <ion-item>
+    <ion-label>Monthly Limit</ion-label> $108.00 </ion-item>
+  <ion-item>
+    <ion-label>Spent</ion-label> $8.00
+  </ion-item>
+  <ion-item class="bar">
+    <ion-label>Remaining</ion-label>$100.00
+  </ion-item> -->
+
+  <div *ngIf="segment=='limits'">
+    
+    <ion-item class="bar" lines="none">
+      <ion-chip (click)="addLimit()">
+        Add Limit <ion-icon name="card"></ion-icon>
+      </ion-chip>
+    </ion-item>
+    
+    <ion-card color="clear">
+      <ion-item class="bar" lines="none">
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <div>Purpose</div>
+            </ion-col>
+            <ion-col>
+              <div>Spent</div>
+            </ion-col>
+            <ion-col>
+              <div>Limit</div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+
+      <div style="height: 45vh; overflow: scroll">
+        <div *ngFor="let b of limits, let i = index">
+          <ion-item (click)="open(b)" color="light">
+            <ion-grid>
+              <ion-row>
+                <ion-col>
+                  <div style="text-align: left;">
+                    <!-- <ion-chip class="{{checkLimit(b)}}"> {{b.purpose}} </ion-chip> -->
+                    <ion-chip color="dark" style="color: black;"> {{b.purpose}} </ion-chip>
+                  </div>
+                </ion-col>
+                <ion-col>
+                  <div style="text-align: right;">
+                    <ion-chip class="{{checkLimit(b)}}"> ${{getAmt(b.spent)}} </ion-chip>
+                  </div>
+                </ion-col>
+                <ion-col>
+                  <div style="text-align: right;">
+                    <ion-chip class="{{checkLimit(b)}}"> ${{getAmt(b.limit)}} </ion-chip>
+                  </div>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+
+          <div *ngIf="b.open">
+            <ion-item color="clear" lines="none">
+              <ion-chip (click)="editLimit(b, i)"> Change Limit <ion-icon name="add"></ion-icon> </ion-chip>
+              <ion-chip (click)="addTransaction(b)"> Add Transaction <ion-icon name="add"></ion-icon> </ion-chip>
+            </ion-item>
+
+            <div style="height: 100px; overflow: scroll">
+              <div *ngFor="let t of b.transactions, let i = index">
+                <ion-item *ngIf="thisMonth(t)" color="clear" lines="none">
+                  <ion-label><!-- <ion-badge color="success">{{b.transactions.length - i}}</ion-badge> -->
+                    &nbsp;{{t.name}}</ion-label>
+                  <ion-grid>
+                    <ion-row>
+                      <ion-col>
+                        <div style="text-align: right;">${{getAmt(t.spent)}}</div>
+                      </ion-col>
+                      <ion-col>
+                        <!-- <div style="text-align: right;">{{displayDate(t.date, 'dayyear')}}</div> -->
+                        <div style="text-align: right;">{{displayDate(t.date)}}</div>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </ion-item>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <ion-item class="bar" lines="none">
+        <!-- <ion-label>Total</ion-label> -->
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <div>Total</div>
+            </ion-col>
+            <ion-col>
+              <div>${{sumSpent()}}</div>
+            </ion-col>
+            <ion-col>
+              <div>${{sumLimit()}}</div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+    </ion-card>
+  </div>
+  
+  
+  <!-- <ion-card>
+    <ion-item>
+      <ion-checkbox color="danger"></ion-checkbox>
+      <ion-title> Rent</ion-title>
+      <ion-icon name="logo-usd"></ion-icon>
+      100.00
+    </ion-item>
+
+    <ion-item>
+      <ion-checkbox color="danger"></ion-checkbox>
+      <ion-title> Groceries </ion-title>
+      <ion-icon name="logo-usd"></ion-icon>
+      50.00
+    </ion-item>
+  </ion-card> -->
+
 
   <ion-fab vertical="bottom" horizontal="center" edge slot="fixed">
     <ion-fab-button color="dark" [routerLink]="['/profile']">
@@ -82,8 +362,9 @@
       <!-- <ion-button (click)="updateMailStatus('toogle')">
         <ion-icon slot="icon-only" name={{mailStatus}}></ion-icon>
       </ion-button> -->
-      <ion-button>
-        <ion-icon slot="icon-only" name="wallet-outline"></ion-icon>
+      
+      <ion-button (click)="presentToast()">
+        <ion-icon slot="icon-only" name="information-circle"></ion-icon>
       </ion-button>
       <div align="left" (click)="changeDate()">
         {{getDate('weekday')}}
@@ -94,12 +375,9 @@
       <div align="right" (click)="changeDate()">
         {{getDate('date')}}
       </div>
-      <ion-button (click)="presentToast()">
-        <ion-icon slot="icon-only" name="information-circle"></ion-icon>
+      <ion-button>
+        <ion-icon slot="icon-only" name="wallet-outline"></ion-icon>
       </ion-button>
-      <!-- <ion-button>
-        <ion-icon slot="icon-only" name="earth"></ion-icon>
-      </ion-button> -->
     </ion-buttons>
   </ion-toolbar>
 </ion-footer>
