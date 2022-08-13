@@ -63,7 +63,7 @@
     </div>
 
     <div *ngIf="segment=='home'" lines="none">
-      <ion-item class="bar">
+      <ion-item class="bar" lines="none">
         <ion-chip (click)="projectLimits = !projectLimits">
           <span *ngIf="!projectLimits"> Show Projected Values </span>
           <span *ngIf="projectLimits"> Hide Projected Values </span>
@@ -113,9 +113,18 @@
         </ion-button>
       </div>
 
-      <ion-button expand="full" fill="clear" *ngIf="canTransfer" color="dark">
+      <!-- <div *ngIf="segment=='funds'">
+        <ion-item class="bar" lines="none">
+          <ion-chip (click)="transferFunds()">
+            Transfer
+            <ion-icon name="send"></ion-icon>
+          </ion-chip>
+        </ion-item>
+      </div> -->
+
+      <!-- <ion-button expand="full" fill="clear" *ngIf="canTransfer" color="dark">
       Tap to change transfer amount
-      </ion-button>
+      </ion-button> -->
       <ion-button expand="full" fill="clear" *ngIf="!canTransfer" color="danger" (click)="canTransfer=true">
         Insufficient funds for transfer!
       </ion-button>

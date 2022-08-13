@@ -221,7 +221,7 @@ export class Tab1Page {
   }
 
   checkEditItem(item){
-    console.log(this.currentItem, item);
+    // console.log(this.currentItem, item);
     return (this.currentItem == item);
   }
 

@@ -62,12 +62,12 @@ export class Tab2Page {
     switch(direction){
       case 'prev':
         this.date.setMonth(this.date.getMonth() - 1);
-        console.log(this.date);
+        // console.log(this.date);
         break;
 
       case 'next':
         this.date.setMonth(this.date.getMonth() + 1);
-        console.log(this.date);
+        // console.log(this.date);
         break;
       
       case 'today':
@@ -197,7 +197,7 @@ export class Tab2Page {
   }
 
   editLimit(limit, ID){
-    console.log(ID);
+    // console.log(ID);
     var header = "Set Limit";
     var subHeader = "For " + limit.purpose;
     var buttons = [
@@ -272,8 +272,8 @@ export class Tab2Page {
   segment: string = "home";
 
   segmentChanged(ev: any) {
-    console.log('Segment changed', ev);
-    console.log(ev.detail.value);
+    // console.log('Segment changed', ev);
+    // console.log(ev.detail.value);
     this.segment = ev.detail.value;
   }
 
@@ -284,8 +284,8 @@ export class Tab2Page {
     // this month/year
     var month = this.getMonth();
 
-    console.log(tDate, month);
-    console.log(transaction.date, this.date);
+    // console.log(tDate, month);
+    // console.log(transaction.date, this.date);
     return tDate == month;
   }
 
@@ -305,8 +305,8 @@ export class Tab2Page {
     return this.getAmt(spent);
   }
 
-  transferDirection: string = "SpendSave";  
-  transferIcon: string = "arrow-forward";
+  transferDirection: string = "SaveSpend";  
+  transferIcon: string = "arrow-back";
   transferAmt: number = 0.00;
   canTransfer: boolean = true;
   projectLimits: boolean = false;
@@ -320,6 +320,7 @@ export class Tab2Page {
       this.transferDirection = "SpendSave";
       this.transferIcon = "arrow-forward";
     }
+    this.canTransfer = true;
   }
 
   transferFunds(){
@@ -367,6 +368,7 @@ export class Tab2Page {
         text: 'Save',
         handler: item => {
           this.transferAmt = parseInt(item.amt);
+          this.canTransfer = true;
         }
       }
     ];
@@ -439,6 +441,13 @@ export class Tab2Page {
   }
 
   showProjection(){
-    return this.getAmt(this.mySpending - parseInt(this.sumLimit()) + parseInt(this.sumSpent()));
+    var spent = 0, excess = 0;
+    for (let i = 0; i < this.limits.length; i++){
+      excess = parseInt(this.limits[i].limit) - parseInt(this.limits[i].spent);
+      if (excess < 0)
+        excess = 0.00;
+      spent += excess;
+    }
+    return this.getAmt(this.mySpending - spent);
   }
 }
