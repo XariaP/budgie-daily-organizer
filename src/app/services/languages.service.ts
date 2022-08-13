@@ -37,7 +37,8 @@ export class LanguagesService {
       //   list: "List",
       // },
       tab2: "Monthly Budget",
-      tab3: "Calculator",
+      tab3: "Calendar",
+      // tab4: "Calculator",
       profile: "Profile",
       age: "Age",
       bday: "Birthday",
@@ -46,7 +47,8 @@ export class LanguagesService {
       i: 1,
       tab1: "쇼핑리스트",
       tab2: "월간 예산",
-      tab3: "계산기",
+      tab3: "달력",
+      // tab4: "계산기",
       profile: "프로필", // "내 프로필"
       age: "나이",
       bday: "생일",
@@ -57,7 +59,8 @@ export class LanguagesService {
       i: 2,
       tab1: "Einkaufsliste",
       tab2: "Monatliches Budget",
-      tab3: "Taschenrechner",
+      tab3: "Kalendar",
+      // tab4: "Taschenrechner",
       profile: "Profil",
       age: "Alter",
       bday: "Geburtstag",
@@ -88,7 +91,11 @@ export class LanguagesService {
         return lang.tab2;
       case "tab3":
         return lang.tab3;
-      case "profile":
+      
+      // case "tab4":
+      //   return lang.tab4;
+      
+        case "profile":
         return lang.profile;
       case "age":
         return lang.age;

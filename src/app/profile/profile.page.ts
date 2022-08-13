@@ -26,6 +26,10 @@ export class ProfilePage implements OnInit {
     // prefersDark.addListener((mediaQuery) => toggleDarkTheme(mediaQuery.matches));
   }
 
+  // dark(){
+  //   AppCompatDelegate.setDefaultNightMode().
+  // }
+
   changeLanguage(){
     this.language.presentLanguageOptionsAlert();
     // this.language.changeLanguage(choiceIndex);
