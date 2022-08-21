@@ -8,13 +8,13 @@
       <!-- <ion-fab-button (click)="user.showMenu = !user.showMenu">
         <ion-icon name="apps"></ion-icon>
       </ion-fab-button> -->
-      <ion-fab-button (click)="navigate('/tabs/tab1')">
+      <ion-fab-button (click)="navigate('/tabs/tab1')" color="{{checkPage('/tabs/tab1')}}">
         <ion-icon name="cart"></ion-icon>
       </ion-fab-button>
-      <ion-fab-button (click)="navigate('/tabs/tab2')">
+      <ion-fab-button (click)="navigate('/tabs/tab2')" color="{{checkPage('/tabs/tab2')}}">
         <ion-icon name="cash-outline"></ion-icon>
       </ion-fab-button>
-      <ion-fab-button (click)="navigate('/tabs/tab3')">
+      <ion-fab-button (click)="navigate('/tabs/tab3')" color="{{checkPage('/tabs/tab3')}}">
         <ion-icon name="calendar"></ion-icon>
       </ion-fab-button>
       <!-- <ion-fab-button (click)="navigate('/profile')">

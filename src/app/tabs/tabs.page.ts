@@ -26,4 +26,13 @@ export class TabsPage {
   navigate(page){
     this.router.navigate([page]);
   }
+
+  checkPage(page){
+    if (page == this.router.url)
+      return "clear";
+    else
+      return "light";
+  }
+
+  
 }
