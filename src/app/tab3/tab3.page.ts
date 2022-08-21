@@ -196,7 +196,7 @@ export class Tab3Page {
   }> = [];
 
   dateToString(date){
-    var locale = "en";
+    var locale = this.language.myLanguage.code;
     var options = {month: 'short', day: '2-digit', year: 'numeric'};
     return date.toLocaleString(locale, options);
   }
@@ -450,7 +450,7 @@ export class Tab3Page {
 
   saveEvent(){
     let eventDate = undefined;
-    if (this.eventDateString != "")
+    if (this.eventDate == undefined && this.eventDateString != "")
       eventDate = this.eventDateString;
     else
       eventDate = this.eventDate;
@@ -463,6 +463,7 @@ export class Tab3Page {
       date: new Date(eventDate),
       active: false,
     };
+    // console.log(eventDate, this.eventDate, this.eventDateString, new Date(eventDate));
 
     let eventId = this.events.length;;
     if (this.emptyEventSlots.length != 0){
