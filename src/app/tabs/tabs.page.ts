@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { LanguagesService } from '../services/languages.service';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-tabs',
@@ -8,11 +10,20 @@ import { LanguagesService } from '../services/languages.service';
 })
 export class TabsPage {
 
-  constructor(public language: LanguagesService) {
+  constructor(public language: LanguagesService, public user: UserService, private router: Router) {
 
   }
 
   getLabel(name){
     return this.language.getLabel(name);
+  }
+  
+  showMenu(){
+    return this.user.showMenu;
+    // return true;
+  }
+
+  navigate(page){
+    this.router.navigate([page]);
   }
 }

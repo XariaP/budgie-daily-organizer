@@ -11,6 +11,8 @@ export class UserService {
     // this.avatarPic = "../../assets/icon.png";
   }
 
+  showMenu: boolean = false;
+
   avatarPic: string = "";
 
   currentAvatarIndex = -1;
