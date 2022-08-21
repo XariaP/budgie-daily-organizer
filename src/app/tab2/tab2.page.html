@@ -316,7 +316,7 @@
 
 
   <ion-fab vertical="bottom" horizontal="center" edge slot="fixed">
-    <ion-fab-button color="dark" [routerLink]="['/profile']">
+    <ion-fab-button color="light" [routerLink]="['/profile']">
       <ion-icon name="person"></ion-icon>
       <img src={{getAvatar()}}>
     </ion-fab-button>
@@ -343,6 +343,42 @@
       </ion-fab-button> -->
     <!-- </ion-fab-list> -->
   </ion-fab>
+
+  <ion-modal trigger="open-modal" (willDismiss)="onWillDismiss($event)">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>All Transactions</ion-title>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content>
+        <ion-item *ngFor="let t of transactions">
+          {{t.note}}
+          <ion-chip slot="end" *ngIf="t.type == 'Deduct'" style="color: red" color="{{getTransactionColor(t)}}">
+            - ${{getAmt(t.amount)}}
+          </ion-chip>
+          <ion-chip slot="end" *ngIf="t.type == 'Deposit'" style="color: green" color="{{getTransactionColor(t)}}">
+            + ${{getAmt(t.amount)}}
+          </ion-chip>
+
+          <ion-badge color="{{getTransactionColor(t)}}" slot="end">{{t.date}}</ion-badge>
+        </ion-item>
+      </ion-content>
+
+      <ion-footer>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-button color="light" (click)="clear()">Clear</ion-button>
+          </ion-buttons>
+          <ion-buttons slot="end">
+            <ion-button color="light" (click)="cancel()">Dismiss</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-footer>
+    </ng-template>
+  </ion-modal>
+
 </ion-content>
 
 <ion-footer>
@@ -384,7 +420,7 @@
       <div align="right" (click)="changeDate()">
         {{getDate('date')}}
       </div>
-      <ion-button>
+      <ion-button id="open-modal">
         <ion-icon slot="icon-only" name="wallet-outline"></ion-icon>
       </ion-button>
     </ion-buttons>

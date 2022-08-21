@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 import { LanguagesService } from '../services/languages.service';
 import { UserService } from '../services/user.service';
+
+import { IonModal } from '@ionic/angular';
 
 @Component({
   selector: 'app-tab2',
@@ -106,7 +108,24 @@ export class Tab2Page {
     toast.present();
   }
 
-  limits = [
+  transactions: Array<{
+    amount: number,
+    note: string,
+    date: string,
+    type: string,
+  }> = [];
+  
+  limits: Array<{
+    purpose: string,
+    spent: number,
+    limit: number,
+    open: boolean,
+    transactions: Array<{
+      name: string,
+      spent: number,
+      date: string,
+    }>
+  }> = [
     // {
     //   purpose: "Groceries",
     //   spent: 20.00,
@@ -139,7 +158,7 @@ export class Tab2Page {
     //     },
     //   ]
     // }
-  ]
+  ];
 
   addLimit(){
     this.limits.push({
@@ -178,6 +197,14 @@ export class Tab2Page {
           };
           limit.transactions.splice(0, 0, newLimit);
           // limit.spent += parseInt(item.spent); //increase spent
+
+          this.mySpending -= item.spent;
+          this.transactions.splice(0, 0, {
+            amount: item.spent,
+            note: item.name,
+            date: (new Date()).toLocaleDateString(),
+            type: "Deduct",
+          })
         }
       }
     ];
@@ -197,7 +224,6 @@ export class Tab2Page {
   }
 
   editLimit(limit, ID){
-    // console.log(ID);
     var header = "Set Limit";
     var subHeader = "For " + limit.purpose;
     var buttons = [
@@ -427,6 +453,13 @@ export class Tab2Page {
               this.mySavings += funds;
               break;
           }
+
+          this.transactions.splice(0, 0, {
+            amount: parseFloat(item.amt),
+            note: type,
+            date: (new Date()).toLocaleDateString(),
+            type: action,
+          })
         }
       }
     ];
@@ -443,11 +476,29 @@ export class Tab2Page {
   showProjection(){
     var spent = 0, excess = 0;
     for (let i = 0; i < this.limits.length; i++){
-      excess = parseInt(this.limits[i].limit) - parseInt(this.limits[i].spent);
+      // excess = parseInt(this.limits[i].limit) - parseInt(this.limits[i].spent);
+      excess = this.limits[i].limit - this.limits[i].spent;
       if (excess < 0)
         excess = 0.00;
       spent += excess;
     }
     return this.getAmt(this.mySpending - spent);
+  }
+
+  @ViewChild(IonModal) modal: IonModal;
+
+  clear(){
+    this.transactions = [];
+  }
+
+  cancel() {
+    this.modal.dismiss(null, 'cancel');
+  }
+
+  getTransactionColor(t){
+    if (t.type == "Deposit")
+      return "success";
+    if (t.type == "Deduct")
+      return "danger";
   }
 }
