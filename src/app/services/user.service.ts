@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { AlertController } from '@ionic/angular';
+import { LanguagesService } from './languages.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  constructor(public alertController: AlertController) {
+  constructor(public alertController: AlertController, public language: LanguagesService) {
     // this.avatarPic = "../../assets/icon.png";
   }
 
@@ -47,5 +48,35 @@ export class UserService {
     });
 
     await alert.present();
+  }
+
+
+  date: Date = new Date();
+
+  // Convert date to string given format
+  getDateString(date, options){
+    var lang = this.language.myLanguage.code;
+    return date.toLocaleString(lang, options);
+  }
+
+  getDate(opt){
+    var options;
+    switch(opt){
+      case 'weekday':
+        options = {weekday: 'long'};
+        break;
+      case 'date':
+        options = {month: 'long', day: 'numeric'};
+        break;
+      case 'dayyear':
+        options = {month: 'long', year: 'numeric'};
+        break;
+      case 'daydate':
+        options = {weekday: 'long', month: 'long', day: '2-digit', year: 'numeric'};
+        break;
+      default:
+        options = {month: 'short', day: 'numeric', weekday: 'short'};
+    }
+    return this.getDateString(this.date, options);
   }
 }
