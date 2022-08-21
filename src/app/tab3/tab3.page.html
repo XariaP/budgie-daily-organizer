@@ -1,8 +1,10 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button (click)="setShow('chat')">
-        <ion-icon slot="icon-only" name="chatbubble-ellipses"></ion-icon>
+      <!-- <ion-button (click)="setShow('chat')"> -->
+      <ion-button (click)="clearEvents()">
+        <!-- <ion-icon slot="icon-only" name="chatbubble-ellipses"></ion-icon> -->
+        <ion-icon slot="icon-only" name="trash-bin"></ion-icon>
       </ion-button>
     </ion-buttons>
 
@@ -11,8 +13,10 @@
     </ion-title>
 
     <ion-buttons slot="end">
-      <ion-button (click)="resetCourses()">
-        <ion-icon slot="icon-only" name="game-controller"></ion-icon>
+      <!-- <ion-button (click)="resetCourses()"> -->
+      <ion-button (click)="addEvent()">
+        <!-- <ion-icon slot="icon-only" name="game-controller"></ion-icon> -->
+        <ion-icon slot="icon-only" name="add-circle"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -27,7 +31,7 @@
 
   <!-- <app-explore-container name="Tab 3 page"></app-explore-container> -->
 
-  <ion-button  fill="outline" expand="full">August 12</ion-button>
+  <ion-button fill="outline" expand="full">{{displayCurrentDate()}}</ion-button>
   
   <div style="text-align: center">
     <ion-chip *ngFor="let m of moods" color="{{checkMood(m)}}" (click)="changeMood(m.name)">
@@ -58,71 +62,100 @@
       {{getCourse(c)}}
     </ion-item>
   </ion-card>
-
-
  
   <!-- <ion-button color="tertiary" fill="outline">August 13</ion-button> -->
-  
-  <div *ngFor="let d of dates">
-    <ion-grid *ngIf="checkEvents(d.date)">
-      <ion-row>
-        <ion-col size="auto">
-          <ion-button (click)="setActive(d)">
-            {{dateToString(d.date)}}
-          </ion-button>
-        </ion-col>
-        <ion-col style="background-color:rgba(250, 235, 215, 0.385); border: white 1px solid; border-radius: 25px;">
-          <span *ngFor="let e of getEventsByID(d.eventIDs);" style="width:max-content;">
-            <ion-chip (click)="e.active = !e.active">{{e.what}}</ion-chip>
-          </span>
-        </ion-col>
-      </ion-row>  
-    </ion-grid>
+  <span *ngIf="listBy=='dates'">
+    <div *ngFor="let d of dates">
+      <ion-grid *ngIf="checkEvents(d.date)">
+        <ion-row>
+          <ion-col size="auto">
+            <ion-button (click)="setActive(d)">
+              {{dateToString(d.date)}}
+            </ion-button>
+          </ion-col>
+          <ion-col style="background-color:rgba(250, 235, 215, 0.385); border: white 1px solid; border-radius: 25px;">
+            <span *ngFor="let e of getEventsByID(d.eventIDs);" style="width:max-content;">
+              <ion-chip (click)="e.active = !e.active">{{e.what}}</ion-chip>
+            </span>
+          </ion-col>
+        </ion-row>  
+      </ion-grid>
 
-    <div style="height:max-content; max-height: 300px; overflow:scroll">
-      <div *ngFor="let e of getEventsByID(d.eventIDs);">
-        <ion-card color="clear" *ngIf="e.active">
-          <ion-item color="secondary" lines="none" (click)="e.active = !e.active">
-            {{e.what}}
-            <ion-badge color="clear" slot="end">{{dateToString(e.date)}}</ion-badge>
-          </ion-item>
-          <ion-item *ngIf="checkInfoValdity(e, 'who')">
-            <ion-chip color="secondary">Who?</ion-chip> {{e.who}}
-          </ion-item>
-          <ion-item *ngIf="checkInfoValdity(e, 'where')">
-            <ion-chip color="secondary">Where?</ion-chip> {{e.where}}
-          </ion-item>
-          <ion-item *ngIf="checkInfoValdity(e, 'time')">
-            <ion-chip color="secondary">When?</ion-chip> {{e.time}}
-          </ion-item>
-        </ion-card>
+      <div style="height:max-content; max-height: 300px; overflow-y:scroll">
+        <div *ngFor="let e of getEventsByID(d.eventIDs);">
+          <ion-card color="clear" *ngIf="e.active">
+            <ion-item color="secondary" lines="none" (click)="e.active = !e.active">
+              {{e.what}}
+              <ion-badge color="clear" slot="end">{{dateToString(e.date)}}</ion-badge>
+            </ion-item>
+            <ion-item *ngIf="checkInfoValdity(e, 'who')">
+              <ion-chip color="secondary">Who?</ion-chip> {{e.who}}
+            </ion-item>
+            <ion-item *ngIf="checkInfoValdity(e, 'where')">
+              <ion-chip color="secondary">Where?</ion-chip> {{e.where}}
+            </ion-item>
+            <ion-item *ngIf="checkInfoValdity(e, 'time')">
+              <ion-chip color="secondary">When?</ion-chip> {{e.time}}
+            </ion-item>
+
+            <ion-item color="secondary">
+              <ion-buttons style="margin: auto;">
+                <ion-button (click)="editEvent(e, getEventIndex(e))">
+                  <ion-icon slot="icon-only" name="brush"></ion-icon>
+                </ion-button>
+                <ion-button (click)="deleteEvent(getEventIndex(e))">
+                  <ion-icon slot="icon-only" name="trash"></ion-icon>
+                </ion-button>
+                <ion-button (click)="copyEvent(e)">
+                  <ion-icon slot="icon-only" name="copy"></ion-icon>
+                </ion-button>
+              </ion-buttons>
+            </ion-item>
+          </ion-card>
+        </div>
       </div>
     </div>
-    <!-- <br>   -->
-  </div>
-
-  <ion-button expand="full" fill="outline" *ngIf="!showPast">
+  </span>
+  
+  <span *ngIf="listBy=='events'">
+    <div *ngFor="let e of events; let i = index">
+      <ion-card color="clear" *ngIf="checkEvents(e.date)">
+        <ion-item color="secondary" lines="none" (click)="e.active = !e.active">
+          {{e.what}}
+          <ion-badge color="clear" slot="end">{{dateToString(e.date)}}</ion-badge>
+        </ion-item>
+        <ion-item *ngIf="checkInfoValdity(e, 'who')">
+          <ion-chip color="secondary">Who?</ion-chip> {{e.who}}
+        </ion-item>
+        <ion-item *ngIf="checkInfoValdity(e, 'where')">
+          <ion-chip color="secondary">Where?</ion-chip> {{e.where}}
+        </ion-item>
+        <ion-item *ngIf="checkInfoValdity(e, 'time')">
+          <ion-chip color="secondary">When?</ion-chip> {{e.time}}
+        </ion-item>
+        
+        <ion-item color="secondary" *ngIf="checkInfoValdity(e, 'menu')">
+          <ion-buttons style="margin: auto;">
+            <ion-button (click)="editEvent(e, i)">
+              <ion-icon slot="icon-only" name="brush"></ion-icon>
+            </ion-button>
+            <ion-button (click)="deleteEvent(i)">
+              <ion-icon slot="icon-only" name="trash"></ion-icon>
+            </ion-button>
+            <ion-button (click)="copyEvent(e)">
+              <ion-icon slot="icon-only" name="copy"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-item>
+        
+      </ion-card>
+    </div>
+  </span>
+  
+  <!-- <ion-button (click)="addEvent()" expand="full" fill="outline" *ngIf="!showPast">
     <ion-icon name="add"></ion-icon>
     Add Event
-  </ion-button>
-  
-  <!-- <ion-card color="clear" *ngFor="let e of events">
-    <ion-item color="secondary" lines="none" (click)="e.active = !e.active">
-      {{e.what}}
-      <ion-badge color="clear" slot="end">{{e.date}}</ion-badge>
-    </ion-item>
-    <ion-item *ngIf="checkInfoValdity(e, 'who')">
-      <ion-chip color="secondary">Who?</ion-chip> {{e.who}}
-    </ion-item>
-    <ion-item *ngIf="checkInfoValdity(e, 'where')">
-      <ion-chip color="secondary">Where?</ion-chip> {{e.where}}
-    </ion-item>
-    <ion-item *ngIf="checkInfoValdity(e, 'time')">
-      <ion-chip color="secondary">When?</ion-chip> {{e.time}}
-    </ion-item>
-  </ion-card> -->
-
-  
+  </ion-button> -->
   <!-- <ion-card color="clear">
     <ion-item color="secondary" lines="none">
       Movies
@@ -166,6 +199,97 @@
     <!-- </ion-item>
   </ion-card> -->
 
+  <ion-modal [isOpen]="isModalOpen">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-button color="light" (click)="setOpen(false)">
+              <ion-icon slot="icon-only" name="close"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+          <ion-title>New Event</ion-title>
+          <ion-buttons slot="end">
+            <ion-button color="light" (click)="saveEvent();">
+              <ion-icon slot="icon-only" name="save"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content>
+        <ion-list>
+          <ion-item>
+            <ion-chip color="secondary" style="width:75px">
+              What?
+            </ion-chip>
+            <ion-input 
+              placeholder="Name of event"
+              [(ngModel)]="eventTitle">
+            </ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-chip color="secondary" style="width:75px">
+              Who?
+            </ion-chip>
+            <ion-input
+              placeholder="People involved"
+              [(ngModel)]="eventPeople">
+            </ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-chip color="secondary" style="width:75px">
+              Where?
+            </ion-chip>
+            <ion-input
+              placeholder="Location of event"
+              [(ngModel)]="eventLocation">
+            </ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-chip color="secondary">All Day?</ion-chip>
+            <ion-input value="Ignores start time when selected" disabled></ion-input>
+            <ion-toggle slot="end" [(ngModel)]="eventAllDay" color="secondary">
+            </ion-toggle>
+          </ion-item>
+
+          <ion-item lines="none">
+            <ion-chip color="secondary" style="width:75px">
+              When?
+            </ion-chip>
+            <ion-input value="{{displayEventDateInput()}}" disabled>
+            </ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-datetime color="secondary"
+              [(ngModel)]="eventDate"
+              min="2000-01-01T00:00:00"
+            ></ion-datetime>
+          </ion-item>
+        </ion-list>
+        
+      </ion-content>
+
+      <ion-footer>
+        <ion-toolbar>
+          <!-- <ion-buttons slot="start">
+            <ion-button color="light">Today: August 15</ion-button>
+          </ion-buttons> -->
+          <ion-buttons slot="end">
+            <ion-button color="light" (click)="setOpen(false);">Dismiss</ion-button>
+          <!-- save -->
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-footer>
+    </ng-template>
+  </ion-modal>
+
+
+
+
   <ion-fab vertical="bottom" horizontal="center" edge slot="fixed">
     <ion-fab-button color="light" [routerLink]="['/profile']">
       <ion-icon name="person"></ion-icon>
@@ -183,8 +307,9 @@
     </ion-buttons>
 
     <ion-buttons slot="end">
-      <ion-button>
-        <ion-icon slot="icon-only" name="airplane"></ion-icon>
+      <ion-button (click)="setListBy('toogle')">
+        <!-- <ion-icon slot="icon-only" name="airplane"></ion-icon> -->
+        <ion-icon slot="icon-only" name="today"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>

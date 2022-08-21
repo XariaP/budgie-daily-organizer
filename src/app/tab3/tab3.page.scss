@@ -12,3 +12,21 @@ ion-button{
     --background: rgba(52, 173, 169, 0.449);
     color: white;
 }
+
+ion-modal {
+--height: 85%;
+--border-radius: 16px;
+--box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+// ion-datetime{
+//     background-color: rgb(11, 131, 237);
+// }
+
+// ion-list{
+//     background-color: rgba(240, 248, 255, 0.075);
+// }
+
+// ion-item{
+//     --background: rgba(52, 173, 169, 0.449);
+// }
