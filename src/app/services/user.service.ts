@@ -17,15 +17,19 @@ export class UserService {
 
   currentAvatarIndex = -1;
   photos = [
-    // "mafumafu-1.png",
-    // "dessert-7.jpg",
     "pet-1.jpg",
     "room-1.jpg",
     "room-2.jpg",
     "room-3.jpg",
     "winter-1.jpg",
     "flower-1.jpg",
+    "flower-2.jpg",
     "food-1.jpg",
+
+    "mafumafu-1.png",
+    "mafumafu-2.png",
+    "mafumafu-3.png",
+    "dessert-7.jpg",
   ]
 
   getAvatar(){
