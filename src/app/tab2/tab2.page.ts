@@ -1,5 +1,4 @@
 import { Component, ViewChild } from '@angular/core';
-import { ToastController } from '@ionic/angular';
 import { LanguagesService } from '../services/languages.service';
 import { UserService } from '../services/user.service';
 
@@ -11,7 +10,7 @@ import { IonModal } from '@ionic/angular';
   styleUrls: ['tab2.page.scss']
 })
 export class Tab2Page {
-  constructor(public toastController: ToastController, public language: LanguagesService, public user: UserService) {
+  constructor(public language: LanguagesService, public user: UserService) {
     this.date = new Date();
     this.date.setDate(1);
     this.exactdate = new Date();
@@ -96,16 +95,6 @@ export class Tab2Page {
       this.mailStatus = "mail";
     else
       this.mailStatus = "mail-" + status;
-  }
-
-  async presentToast() {
-    const toast = await this.toastController.create({
-      message: 'Your settings have been saved.',
-      duration: 2000,
-      icon: "cash-outline",
-      position: 'middle'
-    });
-    toast.present();
   }
 
   transactions: Array<{
@@ -489,6 +478,7 @@ export class Tab2Page {
 
   clear(){
     this.transactions = [];
+    this.language.displayTab2Toast('clear');
   }
 
   cancel() {
@@ -500,5 +490,9 @@ export class Tab2Page {
       return "success";
     if (t.type == "Deduct")
       return "danger";
+  }
+
+  displayHelp(){
+
   }
 }

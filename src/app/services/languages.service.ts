@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { AlertController } from '@ionic/angular';
+import { AlertController, ToastController } from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LanguagesService {
 
-  constructor(public alertController: AlertController) {
+  constructor(public alertController: AlertController, public toastCtrl: ToastController) {
 
   }
 
@@ -137,5 +137,76 @@ export class LanguagesService {
     }
 
     return opts;
+  }
+
+  async presentToast(message, duration, icon, position, color) {
+    const toast = await this.toastCtrl.create({
+      message: message,
+      duration: duration,
+      icon: icon,
+      position: position,
+      color: color,
+      buttons: [
+        {
+          side: 'end',
+          // icon: 'close',
+          text: 'dismiss',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        }
+      ]
+    });
+    toast.present();
+  }
+
+  displayTab1Toast(type){
+    let message, icon, position;
+    switch(type){
+      case 'checkOut':
+        message = "All checked items were removed";
+        icon = "basket";
+        position = "bottom";
+        break;
+      case 'edit':
+        message = "Entering Edit mode";
+        icon = "bag-remove";
+        position = "top";
+        break;
+      case 'save':
+        message = "Exiting Edit mode";
+        icon = "bag-check";
+        position = "top";
+        break;
+    }
+    this.presentToast(message, 2000, icon, position, "light");
+  }
+
+  displayTab2Toast(type){
+    let message, icon;
+    switch(type){
+      case 'clear':
+        message = "All transactions cleared";
+        icon = "cash-outline";
+        break;
+    }
+    this.presentToast(message, 2000, icon, "middle", "light");
+  }
+
+  displayTab3Toast(type, extra = undefined){
+    let message, icon;
+    switch(type){
+      case 'clear':
+        message = "All events cleared";
+        icon = "trash-bin";
+        break;
+
+      case 'groupBy':
+        message = "Grouping by " + extra;
+        icon = "today";
+        break;
+    }
+    this.presentToast(message, 2000, icon, "middle", "light");
   }
 }

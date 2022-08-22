@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { ToastController } from '@ionic/angular';
 import { LanguagesService } from '../services/languages.service';
 import { UserService } from '../services/user.service';
 
@@ -10,7 +9,7 @@ import { UserService } from '../services/user.service';
 })
 export class Tab3Page {
 
-  constructor(public language: LanguagesService, public user: UserService, public toastController: ToastController) {
+  constructor(public language: LanguagesService, public user: UserService) {
     // this.dates = [
     //   {
     //     date: new Date(2022, 8 - 1, 6), // "Aug 06 2022",
@@ -312,15 +311,8 @@ export class Tab3Page {
     this.presentListByToast();
   }
 
-  async presentListByToast() {
-    const toast = await this.toastController.create({
-      message: 'Grouping by ' + this.listBy,
-      duration: 2000,
-      icon: "today",
-      position: 'middle',
-      color: "light",
-    });
-    toast.present();
+  presentListByToast() {
+    this.language.displayTab3Toast('groupBy', this.listBy);
   }
 
   isModalOpen: boolean = false;
@@ -525,15 +517,8 @@ export class Tab3Page {
     this.presentClearToast();
   }
 
-  async presentClearToast() {
-    const toast = await this.toastController.create({
-      message: 'All events cleared',
-      duration: 2000,
-      icon: "trash-bin",
-      position: 'middle',
-      color: "light",
-    });
-    toast.present();
+  presentClearToast() {
+    this.language.displayTab3Toast('clear');
   }
 
 }

@@ -47,10 +47,10 @@ export class Tab1Page {
     var categoryID = this.categories.length;
     // this.categories.push({name: "", quantity: 0});
     this.categories.push({name: "List " + categoryID, quantity: 0});
-    this.editList(this.show);
+    this.editList(this.show, 'new');
   }
 
-  editList(categoryID){
+  editList(categoryID, state){
     if (categoryID != this.all){
       var category = this.categories[categoryID];
       var header = "List Information";
@@ -75,12 +75,16 @@ export class Tab1Page {
           }
         }
       ];
+
+      let nameValue = this.categories[categoryID].name;
+      if (state == 'new') nameValue = "";
+      
       var inputs = [
         {
           type: 'text',
-          placeholder: 'Name',
+          placeholder: 'Name of List',
           name: 'categoryName',
-          value: this.categories[categoryID].name,
+          value: nameValue,
         }
       ];
       this.presentAlert({header, subHeader, buttons, inputs});
@@ -165,7 +169,7 @@ export class Tab1Page {
     if (this.show != index)
       this.show = index;
     else 
-      this.editList(index);
+      this.editList(index, 'old');
   }
 
   determineShow(item){
@@ -189,6 +193,10 @@ export class Tab1Page {
     this.edit = !this.edit;
     if (!this.edit){
       this.currentItem = null;
+      this.language.displayTab1Toast('save');
+    }
+    else{
+      this.language.displayTab1Toast('edit');
     }
   }
 
@@ -291,6 +299,8 @@ export class Tab1Page {
       }
     }
     this.list1 = updatedList;
+
+    this.language.displayTab1Toast('checkOut');
   }
 
   async presentAlert(alertInfo){

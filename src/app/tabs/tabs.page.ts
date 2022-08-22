@@ -31,7 +31,8 @@ export class TabsPage {
     if (page == this.router.url)
       return "clear";
     else
-      return "light";
+      // return "light";
+      return "";
   }
 
   
