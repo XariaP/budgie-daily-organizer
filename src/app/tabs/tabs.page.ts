@@ -28,6 +28,7 @@ export class TabsPage {
   }
 
   checkPage(page){
+    // console.log(page, this.router.url);
     if (page == this.router.url)
       return "clear";
     else

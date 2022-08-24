@@ -17,11 +17,11 @@
       <ion-fab-button (click)="navigate('/tabs/tab3')" color="{{checkPage('/tabs/tab3')}}">
         <ion-icon name="calendar"></ion-icon>
       </ion-fab-button>
+      <ion-fab-button (click)="navigate('/tabs/tab4')" color="{{checkPage('/tabs/tab4')}}">
+        <ion-icon name="alarm"></ion-icon>
+      </ion-fab-button>
       <!-- <ion-fab-button (click)="navigate('/profile')">
         <ion-icon name="person"></ion-icon>
-      </ion-fab-button> -->
-      <!-- <ion-fab-button (click)="navigate('/tabs/tab4')">
-        <ion-icon name="cafe"></ion-icon>
       </ion-fab-button> -->
     </ion-fab-list>
 
@@ -43,15 +43,14 @@
       <ion-label>{{getLabel("tab2")}}</ion-label>
     </ion-tab-button>
 
-    <!-- <ion-tab-button tab="tab4">
-      <ion-icon name="calculator"></ion-icon>
-      <ion-label>{{getLabel("tab4")}}</ion-label>
-    </ion-tab-button> -->
-
     <ion-tab-button tab="tab3">
       <ion-icon name="calendar-outline"></ion-icon>
       <ion-label>{{getLabel("tab3")}}</ion-label>
     </ion-tab-button>
-  </ion-tab-bar>
 
+        <!-- <ion-tab-button tab="tab4">
+      <ion-icon name="calculator"></ion-icon>
+      <ion-label>{{getLabel("tab4")}}</ion-label>
+    </ion-tab-button> -->
+  </ion-tab-bar>
 </ion-tabs>

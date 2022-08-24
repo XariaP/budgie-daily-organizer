@@ -52,3 +52,39 @@ ion-picker.category-picker{
 .picker-button {
     color: orange !important;
 }
+
+.custom-alert{
+    // https://stackoverflow.com/questions/55687695/how-to-give-alert-controller-css-in-ionic-4
+    // --background: red;
+    button.alert-button.alertButton{
+        color: rgb(227, 63, 145);
+    }
+    button.alert-radio-button.alertInput.alert-radio-inner{
+        color: rgb(227, 63, 145);
+    }
+    
+}
+
+// button.alert-button.alertButton {
+//     background-color: var(--ion-color-success);
+//     color: var(--ion-color-success-contrast);
+// }
+
+.alert-title.sc-ion-alert-md {
+
+    color: rgb(227, 63, 145);
+}
+
+[aria-checked=true].sc-ion-alert-md{
+    .alert-radio-inner.sc-ion-alert-md{
+        background: rgb(227, 63, 145);
+    }
+
+    .alert-radio-icon.sc-ion-alert-md {
+        border-color: rgb(227, 63, 145);
+    }
+
+    .alert-radio-label.sc-ion-alert-md{
+        color: rgb(227, 63, 145);
+    }
+}

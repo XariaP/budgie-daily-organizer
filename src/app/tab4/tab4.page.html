@@ -1,0 +1,195 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="toggleEdit()">
+        <ion-icon slot="icon-only" *ngIf="!edit" name="brush"></ion-icon>
+        <ion-icon slot="icon-only" *ngIf="edit" name="trash"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title>
+      <!-- {{getLabel('tab3')}} --> Timetable
+    </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="addRoutine()">
+        <ion-icon slot="icon-only" name="add-circle"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <ion-button class="custom" expand="full" fill="outline" color="light" (click)="changeDay()">{{getDayOfWeek(currentDay)}}</ion-button>
+
+  <div *ngIf="currentDay != -1">
+    <ion-reorder-group (ionItemReorder)="doReorder($event)" disabled="false">
+      <div *ngFor="let card of routines">
+        <div *ngFor="let timeslot of card.timeslots">
+          <ion-card *ngIf="checkToday(timeslot)">
+            <ion-reorder>
+              <ion-item color="light">
+                <ion-icon slot="end" color="danger" name="alert" *ngIf="betweenTime(timeslot.starttime, timeslot.endtime)"></ion-icon>
+                <ion-label>{{card.what}}</ion-label>
+              </ion-item>
+              <ion-item color="light">
+                <ion-badge slot="end" color="{{card.tag.color}}">{{card.tag.val}}</ion-badge>
+                <ion-chip color="{{card.tag.color}}">{{getStartTime(timeslot)}}</ion-chip>
+                <ion-chip color="{{card.tag.color}}">{{getEndTime(timeslot)}}</ion-chip>
+              </ion-item>
+            </ion-reorder>
+          </ion-card>
+        </div>
+      </div>
+    </ion-reorder-group>
+  </div>
+
+  <ion-fab vertical="bottom" horizontal="center" edge slot="fixed">
+    <ion-fab-button color="light" [routerLink]="['/profile']">
+      <ion-icon name="person"></ion-icon>
+      <!-- <img src={{getAvatar()}}> -->
+    </ion-fab-button>
+  </ion-fab>
+
+
+  
+  <div *ngIf="currentDay == -1">
+    <ion-card *ngFor="let card of routines; let r = index">
+      <ion-item color="{{card.tag.color}}" (click)="editOrDelete(r)">
+        <ion-icon *ngIf="edit" name="brush"></ion-icon>
+        <ion-icon *ngIf="!edit" name="trash"></ion-icon>
+        <span style="margin:10px;">{{card.what}}</span>
+        <ion-badge slot="end" color="{{card.tag.color}}">{{card.tag.val}}</ion-badge>
+
+        <!-- <span *ngIf="collapse">
+          <ion-badge *ngFor="let day of time.days"><span *ngIf="day.checked">{{day.short}}</span></ion-badge>
+        </span> -->
+
+      </ion-item>
+      <div *ngIf="!collapse">
+        <div *ngFor="let time of card.timeslots">
+          <div *ngFor="let day of time.freq_active.days; let d = index">
+            <ion-item color="light" *ngIf="day">
+              <ion-label>{{getDayOfWeek(d)}}</ion-label>
+              <ion-chip color="{{card.tag.color}}">{{getStartTime(time)}}</ion-chip>
+              <ion-chip color="{{card.tag.color}}">{{getEndTime(time)}}</ion-chip>
+            </ion-item>
+          </div>
+        </div>
+      </div>
+    </ion-card>
+  </div>
+
+
+  <ion-modal [isOpen]="isModalOpen">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-button color="light" (click)="cancel()">
+              <ion-icon slot="icon-only" name="close"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+
+          <ion-title>Add Routine</ion-title>
+          
+          <ion-buttons slot="end">
+            <ion-button color="light" (click)="saveRoutine();">
+              <ion-icon slot="icon-only" name="save"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content>
+        <ion-item color="danger">
+          <ion-label position="floating">Activity Name</ion-label>
+          <ion-input [(ngModel)]="activity"></ion-input>
+        </ion-item>
+      
+        <div *ngFor="let time of timeslots; let i='index'">
+          <ion-item color="danger" (click)="time.active=!time.active">
+            <ion-label>Timeslot #{{i+1}}</ion-label>
+            <ion-badge *ngFor="let day of time.days"><span *ngIf="day.checked">{{days[day].short}}</span></ion-badge>
+          </ion-item>
+      
+          <div *ngIf="time.active">      
+            <ion-item>
+              <ion-label>From</ion-label>
+              <ion-datetime color="danger" presentation="time" displayFormat="h:mm A" [(ngModel)]="time.starttime"></ion-datetime>
+            </ion-item>
+            
+            <ion-item>
+              <ion-label>Until</ion-label>
+              <ion-datetime color="danger" presentation="time" displayFormat="h:mm A"[(ngModel)]="time.endtime"></ion-datetime>
+            </ion-item>
+      
+            <div style="padding: 10px; text-align: center;">
+              <ion-chip (click)="updateFrequency(i, freq_opt)" *ngFor="let freq_opt of frequency;" color="{{checkIfFreqSelected(time, freq_opt)}}">{{freq_opt.val}}</ion-chip>
+            </div>
+      
+            <ion-item *ngFor="let day of days; let d = index">
+              <ion-label>{{day.val}}</ion-label>
+              <ion-checkbox (click)="updateFrequency(i, frequency[0])" slot="end" color="danger" checked="{{checkIfDayChecked(time.freq_active, d)}}" [(ngModel)]="time.freq_active.days[d]">{{day.val}}</ion-checkbox>
+            </ion-item>
+          </div>
+        </div>
+      
+        <div style="padding-bottom: 1px; text-align: center;">
+          <ion-button (click)="addTimeslot()" expand="full" fill="outline" color="danger">Add Timeslot</ion-button>
+        </div>
+       
+        <ion-item color="danger">
+          <ion-label>Tag</ion-label>
+        </ion-item>
+        <ion-list>    
+          <ion-radio-group value="0" [(ngModel)]="tagID">
+            <ion-item *ngFor="let tag_opt of saved_tags; let i=index">
+              <ion-label>{{tag_opt.val}}</ion-label>
+              <ion-radio slot="start" value="{{i}}" color="{{tag_opt.color}}"></ion-radio>
+            </ion-item>
+          </ion-radio-group>
+        </ion-list>
+      </ion-content>
+
+      <ion-footer>
+        <ion-toolbar>
+          <!-- <ion-buttons slot="start">
+            <ion-button color="light">Today: August 15</ion-button>
+          </ion-buttons> -->
+          <ion-buttons slot="end">
+            <ion-button color="light" (click)="setOpen(false);">Dismiss</ion-button>
+          <!-- save -->
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-footer>
+    </ng-template>
+  </ion-modal>
+
+
+
+</ion-content>
+
+
+
+
+
+<ion-footer [translucent]=false>
+  <ion-toolbar>
+
+    <ion-buttons slot="start">
+      <ion-button>
+        <ion-icon slot="icon-only" name="information-circle"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="showAll()">
+        <ion-icon slot="icon-only" name="today"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+</ion-footer>
+

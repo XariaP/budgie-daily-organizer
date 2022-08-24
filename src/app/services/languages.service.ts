@@ -209,4 +209,31 @@ export class LanguagesService {
     }
     this.presentToast(message, 2000, icon, "middle", "light");
   }
+
+  displayTab4Toast(type){
+    let message, icon;
+    switch(type){
+      case 'edit':
+        message = "Entering Edit mode";
+        icon = "brush";
+        break;
+      case 'delete':
+        message = "Entering Delete mode";
+        icon = "trash";
+        break;
+      case 'all':
+        message = "Showing all routines";
+        icon = "today";
+        break;
+      case 'expand':
+        message = "Expanding routine information";
+        icon = "expand";
+        break;
+      case 'mini':
+        message = "Minimizing routine information";
+        icon = "archive";
+        break;
+    }
+    this.presentToast(message, 2000, icon, "middle", "light");
+  }
 }

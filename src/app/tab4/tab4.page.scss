@@ -1,0 +1,29 @@
+ion-content {
+    --background: linear-gradient(
+        150deg,
+        rgb(220, 191, 249), 
+        rgb(230, 171, 210), 
+        rgb(255, 99, 182)
+    );
+}
+
+ion-toolbar{
+    --background: rgba(173, 52, 133, 0.449);
+    color: white;
+    text-align: center;
+}
+
+// ion-button.custom{
+//     // --background-color: rgba(173, 52, 76, 0.449) !important;
+//     --background: rgba(255, 0, 0, 0.14);
+//     color: rgb(191, 23, 152);
+
+//     // border-color: red;
+//     // border: 2px red solid;
+// }
+
+ion-modal {
+    --height: 85%;
+    --border-radius: 16px;
+    --box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
