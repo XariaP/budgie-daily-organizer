@@ -38,6 +38,7 @@ export class LanguagesService {
       // },
       tab2: "Monthly Budget",
       tab3: "Calendar",
+      tab4: "Timetable",
       // tab4: "Calculator",
       profile: "Profile",
       age: "Age",
@@ -48,6 +49,7 @@ export class LanguagesService {
       tab1: "쇼핑리스트",
       tab2: "월간 예산",
       tab3: "달력",
+      tab4: "시간표",
       // tab4: "계산기",
       profile: "프로필", // "내 프로필"
       age: "나이",
@@ -60,6 +62,7 @@ export class LanguagesService {
       tab1: "Einkaufsliste",
       tab2: "Monatliches Budget",
       tab3: "Kalendar",
+      tab4: "Zeitplan",
       // tab4: "Taschenrechner",
       profile: "Profil",
       age: "Alter",
@@ -79,6 +82,8 @@ export class LanguagesService {
     // }
     this.myLanguage.code = langList[index].code;
     this.myLanguage.index = index;
+
+    this.translateDaysOfWeek();
   }
 
   getLabel(name){
@@ -91,11 +96,10 @@ export class LanguagesService {
         return lang.tab2;
       case "tab3":
         return lang.tab3;
+      case "tab4":
+        return lang.tab4;
       
-      // case "tab4":
-      //   return lang.tab4;
-      
-        case "profile":
+      case "profile":
         return lang.profile;
       case "age":
         return lang.age;
@@ -212,6 +216,7 @@ export class LanguagesService {
 
   displayTab4Toast(type){
     let message, icon;
+    let pos = "middle";
     switch(type){
       case 'edit':
         message = "Entering Edit mode";
@@ -233,7 +238,41 @@ export class LanguagesService {
         message = "Minimizing routine information";
         icon = "archive";
         break;
+      case 'invalidTime':
+        message = "Enter all times before saving";
+        icon = "alarm";
+        pos = "top";
+        break;
     }
-    this.presentToast(message, 2000, icon, "middle", "light");
+    this.presentToast(message, 2000, icon, pos, "light");
+  }
+
+  days = [
+    {val: "Sunday", checked: false, short: "SUN"},
+    {val: "Monday", checked: false, short: "MON"},
+    {val: "Tuesday", checked: false, short: "TUE"},
+    {val: "Wednesday", checked: false, short: "WED"},
+    {val: "Thursday", checked: false, short: "THU"},
+    {val: "Friday", checked: false, short: "FRI"},
+    {val: "Saturday", checked: false, short: "SAT"},
+  ];
+
+  translateDaysOfWeek(){
+    let lang = this.myLanguage.code;
+    let date = new Date();
+    date.setDate(date.getDate() + 1);
+    let count = 0;
+    let daynum = 0;
+    let daynameFull, daynameShort = "";
+    while (count < 7){
+      daynum = date.getDay();
+      daynameFull = date.toLocaleDateString(lang, {weekday: "long"});
+      daynameShort = date.toLocaleDateString(lang, {weekday: "short"});
+      this.days[daynum].val = daynameFull;
+      this.days[daynum].short = daynameShort;
+      date.setDate(date.getDate() + 1);
+      console.log(date);
+      count++;
+    }
   }
 }

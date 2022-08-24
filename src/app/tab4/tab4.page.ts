@@ -19,17 +19,12 @@ export class Tab4Page implements OnInit {
   }
 
   today: Date = new Date();
-  daynums: any = {SUN:0, M:1, T:2, W:3, TH:4, F:5, SAT:6};
-
-  days = [
-    {val: "Sunday", checked: false, short: "SUN"},
-    {val: "Monday", checked: false, short: "MON"},
-    {val: "Tuesday", checked: false, short: "TUE"},
-    {val: "Wednesday", checked: false, short: "WED"},
-    {val: "Thursday", checked: false, short: "THU"},
-    {val: "Friday", checked: false, short: "FRI"},
-    {val: "Saturday", checked: false, short: "SAT"},
-  ];
+  
+  days: Array<{
+    val: string,
+    checked: boolean,
+    short: string
+  }> = this.language.days; 
 
   frequency: Array<{
     val: string,
@@ -58,6 +53,10 @@ export class Tab4Page implements OnInit {
   }> = [];
 
   addRoutine(){
+    if (this.isModalOpen){
+      this.setOpen(false);
+      return;
+    }
     this.setOpen(true);
     this.timeslots = [];
     this.addTimeslot()
@@ -77,7 +76,6 @@ export class Tab4Page implements OnInit {
     this.currentDay++;
     if (this.currentDay == this.days.length)
       this.currentDay = -1;
-    // console.log(this.currentDay, this.days.length);
   }
 
   changeDay(){
@@ -128,8 +126,11 @@ export class Tab4Page implements OnInit {
       return this.days[daynum].val;
   }
 
+  getDayOfWeekShort(daynum){
+    return this.days[daynum].short;
+  }
+
   getTime(date: Date){
-    // console.log(date);
     let lang = this.language.myLanguage.code;
     return date.toLocaleTimeString(lang, { hour: '2-digit', minute: '2-digit'});
   }
@@ -175,7 +176,6 @@ export class Tab4Page implements OnInit {
     if (start[0] == end[0]){
       if (hours == start[0] && mins >= start[1] && mins < end[1])
         between = true;
-      
     }
     else if (start[0] < end[0]){
       if (hours > start[0] && hours < end[0])
@@ -185,15 +185,6 @@ export class Tab4Page implements OnInit {
       if (hours == end[0] && mins < end[1])
         between = true;
     }
-    console.log(between);
-    // else{
-    //   if (hours > start[0] || hours < end[0])
-    //     between = true;
-    //   if (hours == start[0] && mins >= start[1])
-    //     between = true;
-    //   if (hours == end[0] && mins < end[1])
-    //     between = true;
-    // }
     return between;
   }
 
@@ -237,7 +228,7 @@ export class Tab4Page implements OnInit {
     this.isModalOpen = bool;
   }
 
-  activity: string = "j";
+  activity: string = "";
 
   timeslots: Array<{
     starttime: Date,
@@ -252,14 +243,7 @@ export class Tab4Page implements OnInit {
 
   tagID: number = 0;
 
-  // setTag(val, color){
-  //   this.tag.val = val;
-  //   this.tag.color = color;
-  //   return this.tag;
-  // }
-
   addTimeslot(){
-    // this.timeslots = [];
     let newslot = {
       starttime: undefined,
       endtime: undefined,
@@ -271,18 +255,14 @@ export class Tab4Page implements OnInit {
   }
 
   updateFrequency(timeslotID, freq_opt){
-    // console.log(this.timeslots[timeslotID].freq_active);
     this.timeslots[timeslotID].freq_active.val = freq_opt.val;
     this.timeslots[timeslotID].freq_active.color = freq_opt.color;
     if (freq_opt.val != "Custom"){
       this.timeslots[timeslotID].freq_active.days = freq_opt.days.slice(0, 7);
     }
-    // console.log(this.timeslots[timeslotID].freq_active);
-    // console.log(this.frequency);
   }
 
   checkIfDayChecked(freq, daynum){
-    // console.log(freq, daynum);
     if (freq.days.indexOf(daynum) == -1)
       return false;
     else
@@ -299,11 +279,8 @@ export class Tab4Page implements OnInit {
   saveRoutine(){
     for (let i = 0; i < this.timeslots.length; i++){
       if (!this.timeslots[i].starttime || !this.timeslots[i].endtime)
-        //toast
+        this.language.displayTab4Toast('invalidTime');
         return;
-      // this.timeslots[i].starttime = new Date(this.timeslots[i].starttime);
-      // this.timeslots[i].endtime = new Date(this.timeslots[i].endtime);
-      // console.log(this.timeslots[i].endtime);
     }
     this.setOpen(false);
 
@@ -354,4 +331,14 @@ export class Tab4Page implements OnInit {
     this.language.displayTab4Toast(icon);
   }
 
+  displayTimeInput(time){
+    if (time == undefined)
+      return "Tap here to select time";
+    else
+      return this.getTime(new Date(time));
+  }
+
+  getCurrentRoutineColor(){
+    return this.saved_tags[this.tagID].color;
+  }
 }

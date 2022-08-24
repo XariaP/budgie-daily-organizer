@@ -8,7 +8,7 @@
     </ion-buttons>
 
     <ion-title>
-      <!-- {{getLabel('tab3')}} --> Timetable
+      {{language.getLabel('tab4')}}
     </ion-title>
 
     <ion-buttons slot="end">
@@ -103,47 +103,19 @@
       </ion-header>
 
       <ion-content>
-        <ion-item color="danger">
-          <ion-label position="floating">Activity Name</ion-label>
-          <ion-input [(ngModel)]="activity"></ion-input>
+        <ion-item lines="none" color="{{getCurrentRoutineColor()}}">
+          <ion-label>Activity Name</ion-label>
         </ion-item>
-      
-        <div *ngFor="let time of timeslots; let i='index'">
-          <ion-item color="danger" (click)="time.active=!time.active">
-            <ion-label>Timeslot #{{i+1}}</ion-label>
-            <ion-badge *ngFor="let day of time.days"><span *ngIf="day.checked">{{days[day].short}}</span></ion-badge>
-          </ion-item>
-      
-          <div *ngIf="time.active">      
-            <ion-item>
-              <ion-label>From</ion-label>
-              <ion-datetime color="danger" presentation="time" displayFormat="h:mm A" [(ngModel)]="time.starttime"></ion-datetime>
-            </ion-item>
-            
-            <ion-item>
-              <ion-label>Until</ion-label>
-              <ion-datetime color="danger" presentation="time" displayFormat="h:mm A"[(ngModel)]="time.endtime"></ion-datetime>
-            </ion-item>
-      
-            <div style="padding: 10px; text-align: center;">
-              <ion-chip (click)="updateFrequency(i, freq_opt)" *ngFor="let freq_opt of frequency;" color="{{checkIfFreqSelected(time, freq_opt)}}">{{freq_opt.val}}</ion-chip>
-            </div>
-      
-            <ion-item *ngFor="let day of days; let d = index">
-              <ion-label>{{day.val}}</ion-label>
-              <ion-checkbox (click)="updateFrequency(i, frequency[0])" slot="end" color="danger" checked="{{checkIfDayChecked(time.freq_active, d)}}" [(ngModel)]="time.freq_active.days[d]">{{day.val}}</ion-checkbox>
-            </ion-item>
-          </div>
-        </div>
-      
-        <div style="padding-bottom: 1px; text-align: center;">
-          <ion-button (click)="addTimeslot()" expand="full" fill="outline" color="danger">Add Timeslot</ion-button>
-        </div>
-       
-        <ion-item color="danger">
+        <ion-item color="light">
+          <!-- <ion-label>Activity Name</ion-label> -->
+          <ion-input [(ngModel)]="activity" placeholder="Enter activity here"></ion-input>
+        </ion-item>
+
+        <ion-item lines="none" color="{{getCurrentRoutineColor()}}">
           <ion-label>Tag</ion-label>
         </ion-item>
-        <ion-list>    
+        <ion-list>
+        <!-- style="height: 200px; overflow: scroll;">     -->
           <ion-radio-group value="0" [(ngModel)]="tagID">
             <ion-item *ngFor="let tag_opt of saved_tags; let i=index">
               <ion-label>{{tag_opt.val}}</ion-label>
@@ -151,6 +123,47 @@
             </ion-item>
           </ion-radio-group>
         </ion-list>
+      
+        <ion-item lines="none" color="{{getCurrentRoutineColor()}}">
+          <ion-label>Timeslots</ion-label>
+        </ion-item>
+        <div *ngFor="let time of timeslots; let i='index'">
+          <ion-item color="light" lines="none" (click)="time.active=!time.active">
+            <ion-label>Timeslot #{{i+1}}</ion-label>
+            <ion-chip color="{{getCurrentRoutineColor()}}" *ngIf="time.active" slot="start">Minimize</ion-chip>
+            <ion-chip color="{{getCurrentRoutineColor()}}" *ngIf="!time.active" slot="start">Expand</ion-chip>
+            <ion-badge color="{{getCurrentRoutineColor()}}" *ngFor="let day of time.freq_active.days; let d = index"><span *ngIf="day">{{getDayOfWeekShort(d)}}</span></ion-badge>
+          </ion-item>
+      
+          <div *ngIf="time.active">      
+            <ion-item lines="none" (click)="expandTime = !expandTime">
+              <ion-label>From</ion-label>
+              <ion-chip slot="start" *ngIf="expandTime">Minimize</ion-chip>
+              <ion-chip *ngIf="!expandTime">{{displayTimeInput(time.starttime)}}</ion-chip>
+              <ion-datetime *ngIf="expandTime" color="{{getCurrentRoutineColor()}}" presentation="time" displayFormat="h:mm A" [(ngModel)]="time.starttime"></ion-datetime>
+            </ion-item>
+            
+            <ion-item (click)="expandTime = !expandTime">
+              <ion-label>Until</ion-label>
+              <ion-chip slot="start" *ngIf="expandTime">Minimize</ion-chip>
+              <ion-chip *ngIf="!expandTime">{{displayTimeInput(time.endtime)}}</ion-chip>
+              <ion-datetime *ngIf="expandTime" color="{{getCurrentRoutineColor()}}" presentation="time" displayFormat="h:mm A"[(ngModel)]="time.endtime"></ion-datetime>
+            </ion-item>
+      
+            <div style="padding: 10px; text-align: center; background: white;">
+              <ion-chip (click)="updateFrequency(i, freq_opt)" *ngFor="let freq_opt of frequency;" color="{{checkIfFreqSelected(time, freq_opt)}}">{{freq_opt.val}}</ion-chip>
+            </div>
+      
+            <ion-item lines="none" *ngFor="let day of days; let d = index">
+              <ion-label>{{day.val}}</ion-label>
+              <ion-checkbox (click)="updateFrequency(i, frequency[0])" slot="end" color="{{getCurrentRoutineColor()}}" checked="{{checkIfDayChecked(time.freq_active, d)}}" [(ngModel)]="time.freq_active.days[d]">{{day.val}}</ion-checkbox>
+            </ion-item>
+          </div>
+        </div>
+        <div style="padding-bottom: 1px;">
+          <ion-button (click)="addTimeslot()" expand="block" fill="solid" color="{{getCurrentRoutineColor()}}">Add Timeslot</ion-button>
+        </div>
+
       </ion-content>
 
       <ion-footer>
