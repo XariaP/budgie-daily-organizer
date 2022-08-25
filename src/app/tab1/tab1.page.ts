@@ -378,7 +378,7 @@ export class Tab1Page {
   }
 
   retrieveData(){
-    console.log(this.user.tab1shopping);
+    // console.log(this.user.tab1shopping);
     let data = this.user.tab1shopping;
     this.myItems = data.myItems;
     this.categories = data.categories;

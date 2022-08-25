@@ -312,10 +312,6 @@ export class Tab3Page {
         this.listBy = "dates";
       }
     }
-    this.presentListByToast();
-  }
-
-  presentListByToast() {
     this.language.displayTab3Toast('groupBy', this.listBy);
   }
 
@@ -521,13 +517,8 @@ export class Tab3Page {
     this.dates = [];
     this.dateMap = new Map();
     this.emptyEventSlots = [];
-    this.presentClearToast();
-
-    this.saveData();
-  }
-
-  presentClearToast() {
     this.language.displayTab3Toast('clear');
+    this.saveData();
   }
 
   

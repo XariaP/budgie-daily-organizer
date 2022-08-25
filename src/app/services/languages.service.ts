@@ -153,11 +153,10 @@ export class LanguagesService {
       buttons: [
         {
           side: 'end',
-          // icon: 'close',
           text: 'dismiss',
           role: 'cancel',
           handler: () => {
-            console.log('Cancel clicked');
+            // console.log('Cancel clicked');
           }
         }
       ]
@@ -288,7 +287,7 @@ export class LanguagesService {
       this.days[daynum].val = daynameFull;
       this.days[daynum].short = daynameShort;
       date.setDate(date.getDate() + 1);
-      console.log(date);
+      // console.log(date);
       count++;
     }
   }

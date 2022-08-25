@@ -282,9 +282,10 @@ export class Tab4Page implements OnInit {
 
   saveRoutine(){
     for (let i = 0; i < this.timeslots.length; i++){
-      if (!this.timeslots[i].starttime || !this.timeslots[i].endtime)
-        // this.language.displayTab4Toast('invalidTime');
+      if (!this.timeslots[i].starttime || !this.timeslots[i].endtime){
+        this.language.displayTab4Toast('invalidTime');
         return;
+      }
     }
     this.setOpen(false);
 
