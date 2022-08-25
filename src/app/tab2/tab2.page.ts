@@ -14,6 +14,9 @@ export class Tab2Page {
     this.date = new Date();
     this.date.setDate(1);
     this.exactdate = new Date();
+    setTimeout(() => {
+      this.retrieveData();
+    }, 500);
   }
 
   // Convert date to string given format
@@ -82,20 +85,20 @@ export class Tab2Page {
     }
   }
   
-  mailStatus: string = "mail";
+  // mailStatus: string = "mail";
 
-  updateMailStatus(status){
-    if (status == 'toogle'){
-      if (this.mailStatus == "mail-open")
-        this.updateMailStatus('close');
-      else
-        this.updateMailStatus('open');
-    }
-    else if (status == 'close')
-      this.mailStatus = "mail";
-    else
-      this.mailStatus = "mail-" + status;
-  }
+  // updateMailStatus(status){
+  //   if (status == 'toogle'){
+  //     if (this.mailStatus == "mail-open")
+  //       this.updateMailStatus('close');
+  //     else
+  //       this.updateMailStatus('open');
+  //   }
+  //   else if (status == 'close')
+  //     this.mailStatus = "mail";
+  //   else
+  //     this.mailStatus = "mail-" + status;
+  // }
 
   transactions: Array<{
     amount: number,
@@ -245,6 +248,7 @@ export class Tab2Page {
       }
     ];
     this.user.presentAlert({header, subHeader, buttons, inputs});
+    this.saveData();
   }
 
   sumSpent(){
@@ -358,6 +362,7 @@ export class Tab2Page {
       this.mySpending -= this.transferAmt;
       this.mySavings += this.transferAmt;
     }
+    this.saveData();
   }
 
   setTransferAmt(){
@@ -449,6 +454,8 @@ export class Tab2Page {
             date: (new Date()).toLocaleDateString(),
             type: action,
           })
+
+          this.saveData();
         }
       }
     ];
@@ -479,11 +486,18 @@ export class Tab2Page {
   clear(){
     this.transactions = [];
     this.language.displayTab2Toast('clear');
+    this.saveData();
   }
 
   cancel() {
     this.modal.dismiss(null, 'cancel');
   }
+
+  // onWillDismiss(event: Event) {
+  //   const ev = event as CustomEvent<OverlayEventDetail<string>>;
+  //   if (ev.detail.role === 'confirm') {
+  //     this.message = `Hello, ${ev.detail.data}!`;
+  //   }
 
   getTransactionColor(t){
     if (t.type == "Deposit")
@@ -494,5 +508,24 @@ export class Tab2Page {
 
   displayHelp(){
 
+  }
+
+    
+  retrieveData(){
+    let data = this.user.tab2budget;
+    this.transactions = data.transactions;
+    this.limits = data.limits;
+    this.mySpending = data.mySpending;
+    this.mySavings = data.mySavings;
+  }
+  
+  saveData(){
+    this.user.tab2budget = {
+      transactions: this.transactions,
+      limits: this.limits,
+      mySpending: this.mySpending,
+      mySavings: this.mySavings,
+    };
+    this.user.saveTab2Info();
   }
 }

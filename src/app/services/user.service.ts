@@ -1,47 +1,124 @@
 import { Injectable } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { LanguagesService } from './languages.service';
+import { Storage } from '@ionic/storage-angular';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
+  private _storage: Storage | null = null;
 
-  constructor(public alertController: AlertController, public language: LanguagesService) {
-    // this.avatarPic = "../../assets/icon.png";
+  constructor(private storage: Storage, public alertController: AlertController, public language: LanguagesService) {
+    this.init();
+  }
+
+  async init() {
+   const storage = await this.storage.create();
+    this._storage = storage;
+    this.retrieveUser(); //needs to be here otherwise might try to retrieve before storage is set up.
+    this.getTab4Info();
+    this.getTab3Info();
+    this.getTab2Info();
+    this.getTab1Info();
+  }
+
+  // Create and expose methods that users of this service can call
+  public set(key: string, value: any) {
+    this._storage?.set(key, value);
+  }
+
+  public get(key: string){
+    return this._storage?.get(key);
   }
 
   showMenu: boolean = false;
 
-  avatarPic: string = "";
+  path: string = "../../assets/";
 
-  currentAvatarIndex = -1;
   photos = [
     "pet-1.jpg",
-    "room-1.jpg",
-    "room-2.jpg",
-    "room-3.jpg",
+    "room-1.jpg", "room-2.jpg", "room-3.jpg",
     "winter-1.jpg",
-    "flower-1.jpg",
-    "flower-2.jpg",
+    "flower-1.jpg", "flower-2.jpg",
     "food-1.jpg",
 
-    "mafumafu-1.png",
-    "mafumafu-2.png",
-    "mafumafu-3.png",
+    "mafumafu-1.png", "mafumafu-2.png", "mafumafu-3.png",
     "dessert-7.jpg",
   ]
+  
+  currentAvatarIndex = -1;
+
+  avatarPic: string = "";
+
+  tab1shopping = {
+    myItems: [],
+    categories: [
+      {name: "All", quantity: 0},
+    ],
+  };
+  
+  tab2budget = {
+    transactions: [],
+    limits: [],
+    mySpending: 0.00,
+    mySavings: 0.00,
+  };
+  
+  tab3events = {
+    events: [],
+    dates: [],
+    dateMap: new Map(),
+    emptyEventSlots: []
+  };
+
+  tab4routines = [];
+  
+  resetUser(){
+    this.currentAvatarIndex = -1;
+    
+    this.avatarPic = "";
+
+    this.tab1shopping = {
+      myItems: [],
+      categories: [
+        {name: "All", quantity: 0},
+      ],
+    };
+    
+    this.tab2budget = {
+      transactions: [],
+      limits: [],
+      mySpending: 0.00,
+      mySavings: 0.00,
+    };
+    
+    this.tab3events = {
+      events: [],
+      dates: [],
+      dateMap: new Map(),
+      emptyEventSlots: []
+    };
+  
+    this.tab4routines = [];
+
+    this.saveUser();
+    this.saveTab1Info();
+    this.saveTab2Info();
+    this.saveTab3Info();
+    this.saveTab4Info();
+  }
+
 
   getAvatar(){
     return this.avatarPic;
   }
 
   changeAvatar(){
-    var path = "../../assets/";
     this.currentAvatarIndex++;
     if (this.currentAvatarIndex == this.photos.length)
       this.currentAvatarIndex = 0;
-    this.avatarPic = path + this.photos[this.currentAvatarIndex];
+    this.avatarPic = this.path + this.photos[this.currentAvatarIndex];
   }
 
   async presentAlert(alertInfo){
@@ -55,7 +132,6 @@ export class UserService {
 
     await alert.present();
   }
-
 
   date: Date = new Date();
 
@@ -84,5 +160,61 @@ export class UserService {
         options = {month: 'short', day: 'numeric', weekday: 'short'};
     }
     return this.getDateString(this.date, options);
+  }
+
+  async retrieveUser(){
+    let data = await this.get('avatarID');
+    if (data != undefined){
+      this.currentAvatarIndex = data;
+    }
+    if (this.currentAvatarIndex == -1)
+      this.avatarPic = "";
+    else
+      this.avatarPic = this.path + this.photos[this.currentAvatarIndex];
+  }
+
+  
+  saveUser(){
+    this.set('avatarID', this.currentAvatarIndex);
+  }
+
+  saveTab1Info(){
+    this.set('shopping', this.tab1shopping);
+  }
+
+  saveTab2Info(){
+    this.set('budget', this.tab2budget);
+  }
+
+  saveTab3Info(){
+    this.set('events', this.tab3events);
+  }
+
+  saveTab4Info(){
+    this.set('routines', this.tab4routines);
+  }
+
+  async getTab1Info(){
+    let data = await this.get('shopping');
+    if (data != undefined)
+      this.tab1shopping = data;
+  }
+
+  async getTab2Info(){
+    let data = await this.get('budget');
+    if (data != undefined)
+      this.tab2budget = data;
+  }
+
+  async getTab3Info(){
+    let data = await this.get('events');
+    if (data != undefined)
+      this.tab3events = data;
+  }
+
+  async getTab4Info(){
+    let data = await this.get('routines');
+    if (data != undefined)
+      this.tab4routines = data;
   }
 }

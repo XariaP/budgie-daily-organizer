@@ -10,6 +10,9 @@ import { UserService } from '../services/user.service';
 export class Tab3Page {
 
   constructor(public language: LanguagesService, public user: UserService) {
+    setTimeout(() => {
+      this.retrieveData();
+    }, 500);
     // this.dates = [
     //   {
     //     date: new Date(2022, 8 - 1, 6), // "Aug 06 2022",
@@ -81,79 +84,79 @@ export class Tab3Page {
       this.show = "None";
   }
 
-  courses: Array<{code: string, title: string, semester: string}> = [];
+  // courses: Array<{code: string, title: string, semester: string}> = [];
   
-  resetCourses(){
-    this.courses = [
-      {
-        code: 'CSC301',
-        title: 'Introduction to Software Engineering',
-        semester: 'F',
-      },
-      {
-        code: 'CSC318',
-        title: 'Design of Interactive Computational Media',
-        semester: 'F',
-      },
-      {
-        code: 'CSC384',
-        title: 'Introduction to Artificial Intelligence',
-        semester: 'F',
-      },
-      {
-        code: 'CSC458',
-        title: 'Computer Networking Systems',
-        semester: 'F',
-      },
-      {
-        code: 'CSC485',
-        title: 'Computational Linguistics',
-        semester: 'F',
-      },
-      {
-        code: 'EAS110',
-        title: 'Modern Standard Korean I',
-        semester: 'Y',
-      },
-      {
-        code: 'CSC301',
-        title: 'Introduction to Software Engineering',
-        semester: 'S',
-      },
-      {
-        code: 'CSC309',
-        title: 'Programming on the Web',
-        semester: 'S',
-      },
-      {
-        code: 'CSC401',
-        title: 'Natural Language Computing',
-        semester: 'S',
-      },
-      {
-        code: 'CSC488',
-        title: 'Compilers and Interpreters',
-        semester: 'S',
-      },
-    ]
-  }
+  // resetCourses(){
+  //   this.courses = [
+  //     {
+  //       code: 'CSC301',
+  //       title: 'Introduction to Software Engineering',
+  //       semester: 'F',
+  //     },
+  //     {
+  //       code: 'CSC318',
+  //       title: 'Design of Interactive Computational Media',
+  //       semester: 'F',
+  //     },
+  //     {
+  //       code: 'CSC384',
+  //       title: 'Introduction to Artificial Intelligence',
+  //       semester: 'F',
+  //     },
+  //     {
+  //       code: 'CSC458',
+  //       title: 'Computer Networking Systems',
+  //       semester: 'F',
+  //     },
+  //     {
+  //       code: 'CSC485',
+  //       title: 'Computational Linguistics',
+  //       semester: 'F',
+  //     },
+  //     {
+  //       code: 'EAS110',
+  //       title: 'Modern Standard Korean I',
+  //       semester: 'Y',
+  //     },
+  //     {
+  //       code: 'CSC301',
+  //       title: 'Introduction to Software Engineering',
+  //       semester: 'S',
+  //     },
+  //     {
+  //       code: 'CSC309',
+  //       title: 'Programming on the Web',
+  //       semester: 'S',
+  //     },
+  //     {
+  //       code: 'CSC401',
+  //       title: 'Natural Language Computing',
+  //       semester: 'S',
+  //     },
+  //     {
+  //       code: 'CSC488',
+  //       title: 'Compilers and Interpreters',
+  //       semester: 'S',
+  //     },
+  //   ]
+  // }
 
-  getCourse(course){
-    return course.code + ": " + course.title;
-  }
+  // getCourse(course){
+  //   return course.code + ": " + course.title;
+  // }
 
-  colorCourse(course){
-    if (course.semester == 'F')
-      return 'success';
-    if (course.semester == 'S')
-      return 'secondary';
-    if (course.semester == 'Y')
-      return 'tertiary';
-  }
+  // colorCourse(course){
+  //   if (course.semester == 'F')
+  //     return 'success';
+  //   if (course.semester == 'S')
+  //     return 'secondary';
+  //   if (course.semester == 'Y')
+  //     return 'tertiary';
+  // }
 
-  removeCourse(courseIndex){
-    this.courses.splice(courseIndex, 1);
-  }
+  // removeCourse(courseIndex){
+  //   this.courses.splice(courseIndex, 1);
+  // }
 
   moods: any[] = [
     {
@@ -199,6 +202,7 @@ export class Tab3Page {
     var options = {month: 'short', day: '2-digit', year: 'numeric'};
     return date.toLocaleString(locale, options);
   }
+
 
   events: Array<{
     what: string
@@ -401,6 +405,8 @@ export class Tab3Page {
     this.deleteEventDate(this.events[eventID].date, eventID);
     this.events.splice(eventID, 1, placeholder);
     this.emptyEventSlots.push(eventID);
+    
+    this.saveData();
   }
 
   emptyEventSlots: number[] = [];
@@ -455,7 +461,6 @@ export class Tab3Page {
       date: new Date(eventDate),
       active: false,
     };
-    // console.log(eventDate, this.eventDate, this.eventDateString, new Date(eventDate));
 
     let eventId = this.events.length;;
     if (this.emptyEventSlots.length != 0){
@@ -467,6 +472,8 @@ export class Tab3Page {
     this.saveEventDate(new Date(eventDate), eventId);
 
     this.setOpen(false);
+
+    this.saveData();
   }
 
   saveEventDate(date, eventID){
@@ -515,10 +522,31 @@ export class Tab3Page {
     this.dateMap = new Map();
     this.emptyEventSlots = [];
     this.presentClearToast();
+
+    this.saveData();
   }
 
   presentClearToast() {
     this.language.displayTab3Toast('clear');
+  }
+
+  
+  retrieveData(){
+    let data = this.user.tab3events;
+    this.events = data.events;
+    this.dates = data.dates;
+    this.dateMap = data.dateMap;
+    this.emptyEventSlots = data.emptyEventSlots;
+  }
+  
+  saveData(){
+    this.user.tab3events = {
+      events: this.events,
+      dates: this.dates,
+      dateMap: this.dateMap,
+      emptyEventSlots: this.emptyEventSlots,
+    };
+    this.user.saveTab3Info();
   }
 
 }

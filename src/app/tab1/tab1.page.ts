@@ -9,13 +9,17 @@ import { UserService } from '../services/user.service';
   styleUrls: ['tab1.page.scss']
 })
 export class Tab1Page {
-  constructor(public language: LanguagesService, public user: UserService, public alertController: AlertController, public pickerCtrl: PickerController) {}
+  constructor(public language: LanguagesService, public user: UserService, public alertController: AlertController, public pickerCtrl: PickerController) {
+    setTimeout(() => {
+      this.retrieveData();
+    }, 500);
+  }
 
   getLabel(name){
     return this.language.getLabel(name);
   }
 
-  list1 = [
+  myItems = [
     // {itemName: "Milk", icon: "cafe", color: "danger", categoryID: 1, selected: false, quantity: 1},
     // {itemName: "Yoghurt", icon: "cafe", color: "warning", categoryID: 1, selected: false, quantity: 3},
     // {itemName: "Eggs", icon: "egg", color: "success", categoryID: 1, selected: false, quantity: 0},
@@ -63,6 +67,7 @@ export class Tab1Page {
               this.categories.splice(categoryID, 1);
               this.showAll();
             }
+            this.saveData();
           }
         },
         {
@@ -72,6 +77,7 @@ export class Tab1Page {
               category.name = "List " + categoryID;
             else
               category.name = item.categoryName;
+            this.saveData();
           }
         }
       ];
@@ -211,12 +217,12 @@ export class Tab1Page {
       item.selected = !item.selected;
       
       if (item.selected){
-        this.list1.push(item);
-        this.list1.splice(this.list1.indexOf(item), 1);
+        this.myItems.push(item);
+        this.myItems.splice(this.myItems.indexOf(item), 1);
       }
       else{
-        this.list1.splice(this.list1.indexOf(item), 1);
-        this.list1.splice(0, 0, item);
+        this.myItems.splice(this.myItems.indexOf(item), 1);
+        this.myItems.splice(0, 0, item);
       }
     }
   }
@@ -246,11 +252,12 @@ export class Tab1Page {
       selected: false,
       quantity: 1,
     };
-    this.list1.splice(0, 0, newItem);
-    this.categories[this.list1[0].categoryID].quantity++;
+    this.myItems.splice(0, 0, newItem);
+    this.categories[this.myItems[0].categoryID].quantity++;
 
     this.edit = true; //
     this.selectItem(newItem, this.edit);
+    this.saveData();
   }
 
   removeItem(item){
@@ -269,14 +276,15 @@ export class Tab1Page {
       {
         text:'OK',
         handler: () => {
-          var tempList = this.list1;
+          var tempList = this.myItems;
           for (var i = 0; i < tempList.length; i++){
               if (tempList[i] == item){
-                this.categories[this.list1[i].categoryID].quantity--;
-                this.list1.splice(i, 1);
+                this.categories[this.myItems[i].categoryID].quantity--;
+                this.myItems.splice(i, 1);
                 break;
               }
           }
+          this.saveData();
         },
         cssClass: 'alert-button-confirm'
       }
@@ -292,15 +300,17 @@ export class Tab1Page {
       this.categories[q].quantity = 0;
     }
 
-    for (var i = 0; i < this.list1.length; i++){
-      if (!this.list1[i].selected){
-        updatedList.push(this.list1[i]);
-        this.categories[this.list1[i].categoryID].quantity++;
+    for (var i = 0; i < this.myItems.length; i++){
+      if (!this.myItems[i].selected){
+        updatedList.push(this.myItems[i]);
+        this.categories[this.myItems[i].categoryID].quantity++;
       }
     }
-    this.list1 = updatedList;
+    this.myItems = updatedList;
 
     this.language.displayTab1Toast('checkOut');
+
+    this.saveData();
   }
 
   async presentAlert(alertInfo){
@@ -367,6 +377,21 @@ export class Tab1Page {
     await picker.present();
   }
 
+  retrieveData(){
+    console.log(this.user.tab1shopping);
+    let data = this.user.tab1shopping;
+    this.myItems = data.myItems;
+    this.categories = data.categories;
+  }
+  
+  saveData(){
+    this.user.tab1shopping = {
+      myItems: this.myItems,
+      categories: this.categories,
+    };
+    this.user.saveTab1Info();
+  }
+
   //   async presentAddAlert() {
 //     var header = 'Please enter your info';
 
@@ -381,7 +406,7 @@ export class Tab1Page {
 //             categoryID: item.category,
 //             selected: false
 //           };
-//           this.list1.push(newItem);
+//           this.myItems.push(newItem);
 
 //           this.setEdit();
 //           this.selectItem(newItem, this.edit);

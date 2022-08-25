@@ -13,9 +13,13 @@ import { ItemReorderEventDetail } from '@ionic/core';
 export class Tab4Page implements OnInit {
   @ViewChild(IonReorderGroup) reorderGroup: IonReorderGroup;
 
-  constructor(public language: LanguagesService, public user: UserService) { }
+  constructor(public language: LanguagesService, public user: UserService) {
+  }
 
   ngOnInit() {
+    setTimeout(() => {
+      this.retrieveData();
+    }, 500);
   }
 
   today: Date = new Date();
@@ -279,7 +283,7 @@ export class Tab4Page implements OnInit {
   saveRoutine(){
     for (let i = 0; i < this.timeslots.length; i++){
       if (!this.timeslots[i].starttime || !this.timeslots[i].endtime)
-        this.language.displayTab4Toast('invalidTime');
+        // this.language.displayTab4Toast('invalidTime');
         return;
     }
     this.setOpen(false);
@@ -289,12 +293,14 @@ export class Tab4Page implements OnInit {
       timeslots: this.timeslots,
       tag: this.saved_tags[this.tagID],
     });
+    this.saveData();
   }
 
   lastSave = undefined;
 
   deleteRoutine(ID){
     this.routines.splice(ID, 1);
+    this.saveData();
   }
 
   editRoutine(ID){
@@ -340,5 +346,18 @@ export class Tab4Page implements OnInit {
 
   getCurrentRoutineColor(){
     return this.saved_tags[this.tagID].color;
+  }
+
+  retrieveData(){
+    this.routines = this.user.tab4routines;
+  }
+  
+  saveData(){
+    this.user.tab4routines = this.routines;
+    this.user.saveTab4Info();
+  }
+
+  getAvatar(){
+    return this.user.getAvatar();
   }
 }

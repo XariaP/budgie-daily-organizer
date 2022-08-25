@@ -44,13 +44,20 @@ export class ProfilePage implements OnInit {
   }
 
   getAvatar(){
-    var avatarPic = this.user.getAvatar();
-    if (avatarPic == "")
-      avatarPic = "../../assets/" + this.user.photos[0];
-    return avatarPic;
+    return this.user.getAvatar();
   }
 
   changeAvatar(){
     this.user.changeAvatar();
+  }
+
+  saveUser(){
+    this.user.saveUser();
+    this.language.displayProfileToast('save');
+  }
+
+  deleteUser(){
+    this.user.resetUser();
+    this.language.displayProfileToast('delete');
   }
 }

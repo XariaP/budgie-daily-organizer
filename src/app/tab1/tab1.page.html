@@ -32,7 +32,7 @@
     <ion-chip (click)="addList()">New List<ion-icon name="add"></ion-icon></ion-chip>
   </div>
   
-  <div *ngFor="let item of list1">
+  <div *ngFor="let item of myItems">
   <ion-card *ngIf="determineShow(item)">
     <ion-item lines="none" (click)="selectItem(item, edit)">
       <ion-chip (click)="setEdit()" color={{checkSelected(item)}}> {{item.quantity}} </ion-chip>

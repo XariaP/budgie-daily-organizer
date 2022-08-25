@@ -165,6 +165,23 @@ export class LanguagesService {
     toast.present();
   }
 
+  displayProfileToast(type){
+    let message, icon, position;
+    switch(type){
+      case 'delete':
+        message = "Profile deleted";
+        icon = "close-circle";
+        position = "middle";
+        break;
+      case 'save':
+        message = "Profile saved";
+        icon = "save";
+        position = "middle";
+        break;
+    }
+    this.presentToast(message, 2000, icon, position, "light");
+  }
+
   displayTab1Toast(type){
     let message, icon, position;
     switch(type){

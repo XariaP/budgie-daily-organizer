@@ -1,13 +1,13 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button [routerLink]="['']">
-        <ion-icon slot="icon-only" name="arrow-undo"></ion-icon>
+      <ion-button (click)="deleteUser()">
+        <ion-icon slot="icon-only" name="close-circle"></ion-icon>
       </ion-button>
     </ion-buttons>
     <ion-title>{{getLabel('profile')}}</ion-title>
     <ion-buttons slot="end">
-      <ion-button>
+      <ion-button (click)="saveUser()">
         <ion-icon slot="icon-only" name="save"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -43,9 +43,8 @@
     <!-- <ion-label>Xaria Adjoa Kianna Prempeh</ion-label>
   </ion-item> -->
   <br>
-  <ion-avatar (click)="changeAvatar()" style="height: 200px; width:200px; margin:auto">
+  <ion-avatar (click)="changeAvatar()" style="height: 200px; width:200px; margin:auto; background: lightgrey">
     <img src={{getAvatar()}}>
-    <!-- <ion-icon style="height: 200px; width:200px; background-color: white; border-radius: 50%;" color="secondary" name="ice-cream-outline"></ion-icon> -->
   </ion-avatar>
   <br>
   <div align="center">
@@ -84,7 +83,7 @@
       <ion-button (click)="updateMailStatus('unread')">
         <ion-icon slot="icon-only" name="medal"></ion-icon>
       </ion-button>
-      <ion-button>
+      <ion-button (click)="user.retrieveUser()">
         <ion-icon slot="icon-only" name=mail></ion-icon>
       </ion-button>
     </ion-buttons>
