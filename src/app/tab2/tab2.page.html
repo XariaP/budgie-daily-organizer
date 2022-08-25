@@ -231,7 +231,6 @@
               <ion-row>
                 <ion-col>
                   <div style="text-align: left;">
-                    <!-- <ion-chip class="{{checkLimit(b)}}"> {{b.purpose}} </ion-chip> -->
                     <ion-chip color="dark" style="color: black;"> {{b.purpose}} </ion-chip>
                   </div>
                 </ion-col>
@@ -258,10 +257,13 @@
             <div style="height: 100px; overflow: scroll">
               <div *ngFor="let t of b.transactions, let i = index">
                 <ion-item *ngIf="thisMonth(t)" color="clear" lines="none">
-                  <ion-label><!-- <ion-badge color="success">{{b.transactions.length - i}}</ion-badge> -->
-                    &nbsp;{{t.name}}</ion-label>
+                  <!-- <ion-label><ion-badge color="success">{{b.transactions.length - i}}</ion-badge>
+                    &nbsp;{{t.name}}</ion-label> -->
                   <ion-grid>
                     <ion-row>
+                      <ion-col>
+                        <ion-label> &nbsp;{{t.name}}</ion-label>
+                      </ion-col>
                       <ion-col>
                         <div style="text-align: right;">${{getAmt(t.spent)}}</div>
                       </ion-col>

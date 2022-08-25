@@ -170,6 +170,7 @@ export class Tab2Page {
 
   mySpending: number = 0.00; // 1000.00;
   mySavings: number = 0.00; //5000.00;
+  totalSpent: number = 0.00;
 
   addTransaction(limit){
     var header = "New transaction";
@@ -191,12 +192,15 @@ export class Tab2Page {
           // limit.spent += parseInt(item.spent); //increase spent
 
           this.mySpending -= item.spent;
+          this.totalSpent += parseFloat(item.spent);
+
           this.transactions.splice(0, 0, {
             amount: item.spent,
             note: item.name,
             date: (new Date()).toLocaleDateString(),
             type: "Deduct",
           })
+          this.saveData();
         }
       }
     ];
@@ -230,6 +234,7 @@ export class Tab2Page {
         handler: item => {
           limit.purpose = item.purpose;
           limit.limit = item.limit;
+          this.saveData();
         }
       }
     ];
@@ -248,16 +253,10 @@ export class Tab2Page {
       }
     ];
     this.user.presentAlert({header, subHeader, buttons, inputs});
-    this.saveData();
   }
 
   sumSpent(){
-    var spent = 0;
-    for (let i = 0; i < this.limits.length; i++){
-      this.calcLimitSpent(this.limits[i]);
-      spent += this.limits[i].spent;
-    }
-    return this.getAmt(spent);
+    return this.getAmt(this.totalSpent);
   }
   
   sumLimit(){
@@ -436,6 +435,7 @@ export class Tab2Page {
         handler: item => {
           var funds = parseFloat(item.amt);
           if (action == "Deduct"){
+            this.totalSpent += funds;
             funds = - funds;
           }
 
@@ -517,6 +517,7 @@ export class Tab2Page {
     this.limits = data.limits;
     this.mySpending = data.mySpending;
     this.mySavings = data.mySavings;
+    this.totalSpent = data.totalSpent;
   }
   
   saveData(){
@@ -525,6 +526,7 @@ export class Tab2Page {
       limits: this.limits,
       mySpending: this.mySpending,
       mySavings: this.mySavings,
+      totalSpent: this.totalSpent,
     };
     this.user.saveTab2Info();
   }

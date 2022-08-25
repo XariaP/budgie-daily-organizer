@@ -63,6 +63,7 @@ export class UserService {
     limits: [],
     mySpending: 0.00,
     mySavings: 0.00,
+    totalSpent: 0.00,
   };
   
   tab3events = {
@@ -91,6 +92,7 @@ export class UserService {
       limits: [],
       mySpending: 0.00,
       mySavings: 0.00,
+      totalSpent: 0.00,
     };
     
     this.tab3events = {
