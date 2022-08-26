@@ -300,6 +300,27 @@ export class Tab4Page implements OnInit {
   lastSave = undefined;
 
   deleteRoutine(ID){
+    var header = 'Are you sure you want to delete your "' + this.routines[ID].what + '" routine?';
+    var subHeader = "";
+    var buttons = [
+      {
+        text: 'Cancel',
+        role: 'cancel',
+        cssClass: 'alert-button-cancel'
+      },
+      {
+        text:'OK',
+        handler: () => {
+          this.deleteRoutineHelper(ID);
+        },
+        cssClass: 'alert-button-confirm'
+      }
+    ]
+    var inputs = [];
+    this.language.presentAlert({header, subHeader, buttons, inputs});
+  }
+
+  deleteRoutineHelper(ID){
     this.routines.splice(ID, 1);
     this.saveData();
   }
@@ -310,12 +331,14 @@ export class Tab4Page implements OnInit {
     this.activity = this.routines[ID].what;
     this.tagID = this.saved_tags.indexOf(this.routines[ID].tag);
     this.lastSave = {ID: ID, data: this.routines[ID]};
-    this.deleteRoutine(ID);
+    this.deleteRoutineHelper(ID);
   }
 
   cancel(){
     this.setOpen(false);
-    this.routines.splice(this.lastSave.ID, 0, this.lastSave.data);
+    if (this.lastSave != undefined){
+      this.routines.splice(this.lastSave.ID, 0, this.lastSave.data);
+    }
   }
 
   editOrDelete(ID){
@@ -354,7 +377,7 @@ export class Tab4Page implements OnInit {
   }
   
   saveData(){
-    this.user.tab4routines = this.routines;
+    this.user.setTab4Info(this.routines);
     this.user.saveTab4Info();
   }
 

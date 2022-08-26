@@ -484,6 +484,27 @@ export class Tab2Page {
   @ViewChild(IonModal) modal: IonModal;
 
   clear(){
+    var header = 'Are you sure you want to delete all transactions?';
+    var subHeader = "";
+    var buttons = [
+      {
+        text: 'Cancel',
+        role: 'cancel',
+        cssClass: 'alert-button-cancel'
+      },
+      {
+        text:'OK',
+        handler: () => {
+          this.clearTransactions();
+        },
+        cssClass: 'alert-button-confirm'
+      }
+    ]
+    var inputs = [];
+    this.language.presentAlert({header, subHeader, buttons, inputs});
+  }
+
+  clearTransactions(){
     this.transactions = [];
     this.language.displayTab2Toast('clear');
     this.saveData();
@@ -521,13 +542,13 @@ export class Tab2Page {
   }
   
   saveData(){
-    this.user.tab2budget = {
+    this.user.setTab2Info({
       transactions: this.transactions,
       limits: this.limits,
       mySpending: this.mySpending,
       mySavings: this.mySavings,
       totalSpent: this.totalSpent,
-    };
+    });
     this.user.saveTab2Info();
   }
 }

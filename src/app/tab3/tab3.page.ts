@@ -388,7 +388,28 @@ export class Tab3Page {
     this.deleteEvent(eventID);
   }
 
-  deleteEvent(eventID){
+  deleteEvent(eventID){ //combine all alert presnters
+    var header = 'Are you sure you want to delete this event "' + this.events[eventID].what + '"?';
+    var subHeader = "";
+    var buttons = [
+      {
+        text: 'Cancel',
+        role: 'cancel',
+        cssClass: 'alert-button-cancel'
+      },
+      {
+        text:'OK',
+        handler: () => {
+          this.deleteEventHelper(eventID);
+        },
+        cssClass: 'alert-button-confirm'
+      }
+    ]
+    var inputs = [];
+    this.language.presentAlert({header, subHeader, buttons, inputs});
+  }
+
+  deleteEventHelper(eventID){
     let placeholder = {
       what: "",
       who: [],
@@ -513,6 +534,27 @@ export class Tab3Page {
   }
   
   clearEvents(){
+    var header = 'Are you sure you want to delete all events?';
+    var subHeader = "";
+    var buttons = [
+      {
+        text: 'Cancel',
+        role: 'cancel',
+        cssClass: 'alert-button-cancel'
+      },
+      {
+        text:'OK',
+        handler: () => {
+          this.clearEventsHelper();
+        },
+        cssClass: 'alert-button-confirm'
+      }
+    ]
+    var inputs = [];
+    this.language.presentAlert({header, subHeader, buttons, inputs});
+  }
+
+  clearEventsHelper(){
     this.events = [];
     this.dates = [];
     this.dateMap = new Map();
@@ -531,12 +573,12 @@ export class Tab3Page {
   }
   
   saveData(){
-    this.user.tab3events = {
+    this.user.setTab3Info({
       events: this.events,
       dates: this.dates,
       dateMap: this.dateMap,
       emptyEventSlots: this.emptyEventSlots,
-    };
+    });
     this.user.saveTab3Info();
   }
 

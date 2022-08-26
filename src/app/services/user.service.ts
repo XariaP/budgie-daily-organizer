@@ -51,6 +51,9 @@ export class UserService {
 
   avatarPic: string = "";
 
+  userName: string = "Xaria Adjoa Kianna Prempeh";
+  userBDay =  "2001-07-02T00:00:00";
+
   tab1shopping = {
     myItems: [],
     categories: [
@@ -79,6 +82,10 @@ export class UserService {
     this.currentAvatarIndex = -1;
     
     this.avatarPic = "";
+
+    this.userName = "";
+
+    this.userBDay =  "2000-01-01T00:00:00";
 
     this.tab1shopping = {
       myItems: [],
@@ -123,6 +130,30 @@ export class UserService {
     this.avatarPic = this.path + this.photos[this.currentAvatarIndex];
   }
 
+  setName(name){
+    this.userName = name;
+  }
+
+  setBDay(date){
+    this.userBDay = date;
+  }
+
+  setTab1Info(info){
+    this.tab1shopping = info;
+  }
+
+  setTab2Info(info){
+    this.tab2budget = info;
+  }
+
+  setTab3Info(info){
+    this.tab3events = info;
+  }
+
+  setTab4Info(info){
+    this.tab4routines = info;
+  }
+
   async presentAlert(alertInfo){
     const alert = await this.alertController.create({
       header: alertInfo.header,
@@ -165,9 +196,12 @@ export class UserService {
   }
 
   async retrieveUser(){
-    let data = await this.get('avatarID');
+    let data = await this.get('userInfo');
     if (data != undefined){
-      this.currentAvatarIndex = data;
+      console.log(data);
+      this.userName = data.name;
+      this.userBDay = data.bday;
+      this.currentAvatarIndex = data.avatar;
     }
     if (this.currentAvatarIndex == -1)
       this.avatarPic = "";
@@ -175,9 +209,12 @@ export class UserService {
       this.avatarPic = this.path + this.photos[this.currentAvatarIndex];
   }
 
-  
   saveUser(){
-    this.set('avatarID', this.currentAvatarIndex);
+    this.set('userInfo', {
+      avatar: this.currentAvatarIndex,
+      name: this.userName,
+      bday: this.userBDay
+    });
   }
 
   saveTab1Info(){

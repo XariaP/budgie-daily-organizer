@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AlertController, PickerController } from '@ionic/angular';
+import { PickerController } from '@ionic/angular';
 import { LanguagesService } from '../services/languages.service';
 import { UserService } from '../services/user.service';
 
@@ -9,7 +9,7 @@ import { UserService } from '../services/user.service';
   styleUrls: ['tab1.page.scss']
 })
 export class Tab1Page {
-  constructor(public language: LanguagesService, public user: UserService, public alertController: AlertController, public pickerCtrl: PickerController) {
+  constructor(public language: LanguagesService, public user: UserService, public pickerCtrl: PickerController) {
     setTimeout(() => {
       this.retrieveData();
     }, 500);
@@ -52,6 +52,7 @@ export class Tab1Page {
     // this.categories.push({name: "", quantity: 0});
     this.categories.push({name: "List " + categoryID, quantity: 0});
     this.editList(this.show, 'new');
+    this.saveData();
   }
 
   editList(categoryID, state){
@@ -93,7 +94,7 @@ export class Tab1Page {
           value: nameValue,
         }
       ];
-      this.presentAlert({header, subHeader, buttons, inputs});
+      this.language.presentAlert({header, subHeader, buttons, inputs});
     }
   }
 
@@ -255,16 +256,12 @@ export class Tab1Page {
     this.myItems.splice(0, 0, newItem);
     this.categories[this.myItems[0].categoryID].quantity++;
 
-    this.edit = true; //
+    this.edit = true;
     this.selectItem(newItem, this.edit);
     this.saveData();
   }
 
   removeItem(item){
-    this.createRemoveAlert(item);
-  }
-
-  createRemoveAlert(item) {
     var header = 'Are you sure you want to delete "' + item.itemName + '"?';
     var subHeader = "";
     var buttons = [
@@ -276,21 +273,25 @@ export class Tab1Page {
       {
         text:'OK',
         handler: () => {
-          var tempList = this.myItems;
-          for (var i = 0; i < tempList.length; i++){
-              if (tempList[i] == item){
-                this.categories[this.myItems[i].categoryID].quantity--;
-                this.myItems.splice(i, 1);
-                break;
-              }
-          }
-          this.saveData();
+          this.deleteItemHelper(item);
         },
         cssClass: 'alert-button-confirm'
       }
     ]
     var inputs = [];
-    this.presentAlert({header, subHeader, buttons, inputs});
+    this.language.presentAlert({header, subHeader, buttons, inputs});
+  }
+
+  deleteItemHelper(item){
+    var tempList = this.myItems;
+    for (var i = 0; i < tempList.length; i++){
+        if (tempList[i] == item){
+          this.categories[this.myItems[i].categoryID].quantity--;
+          this.myItems.splice(i, 1);
+          break;
+        }
+    }
+    this.saveData();
   }
 
   checkOut(){
@@ -311,18 +312,6 @@ export class Tab1Page {
     this.language.displayTab1Toast('checkOut');
 
     this.saveData();
-  }
-
-  async presentAlert(alertInfo){
-    const alert = await this.alertController.create({
-      header: alertInfo.header,
-      subHeader: alertInfo.subHeader,
-      buttons: alertInfo.buttons,
-      inputs: alertInfo.inputs,
-      cssClass: 'custom-alert',
-    });
-
-    await alert.present();
   }
 
   async openPicker(item) {
@@ -385,10 +374,10 @@ export class Tab1Page {
   }
   
   saveData(){
-    this.user.tab1shopping = {
+    this.user.setTab1Info({
       myItems: this.myItems,
       categories: this.categories,
-    };
+    });
     this.user.saveTab1Info();
   }
 

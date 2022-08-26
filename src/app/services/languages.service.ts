@@ -143,6 +143,18 @@ export class LanguagesService {
     return opts;
   }
 
+  async presentAlert(alertInfo){
+    const alert = await this.alertController.create({
+      header: alertInfo.header,
+      subHeader: alertInfo.subHeader,
+      buttons: alertInfo.buttons,
+      inputs: alertInfo.inputs,
+      cssClass: 'custom-alert',
+    });
+
+    await alert.present();
+  }
+  
   async presentToast(message, duration, icon, position, color) {
     const toast = await this.toastCtrl.create({
       message: message,

@@ -7,3 +7,15 @@ ion-toolbar{
     color: white;
     text-align: center;
 }
+
+ion-modal {
+    --height: 85%;
+    --border-radius: 16px;
+    --box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+.mailbox {
+    --background: rgb(192, 187, 249);
+    // margin: auto;
+    // text-align: center;
+}

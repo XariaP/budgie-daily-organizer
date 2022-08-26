@@ -4,6 +4,9 @@
       <ion-button (click)="deleteUser()">
         <ion-icon slot="icon-only" name="close-circle"></ion-icon>
       </ion-button>
+      <!-- <ion-button (click)="exit()">
+        <ion-icon name="arrow-undo"></ion-icon>
+      </ion-button> -->
     </ion-buttons>
     <ion-title>{{getLabel('profile')}}</ion-title>
     <ion-buttons slot="end">
@@ -48,10 +51,10 @@
   </ion-avatar>
   <br>
   <div align="center">
-    <ion-chip color="light"> Xaria Adjoa Kianna Prempeh </ion-chip>
+    <ion-chip color="light"> {{getUserName()}} </ion-chip>
     <br>
     <ion-chip color="light"> {{getLabel("age")}}: 21 </ion-chip>
-    <ion-chip color="light"> {{getLabel("bday")}}: July 2nd, 2001 </ion-chip>
+    <ion-chip color="light"> {{getLabel("bday")}}: {{getBDay()}} </ion-chip>
     <!-- <br>
     <ion-chip color="light"> +1 246 282 0462 🇧🇧 </ion-chip>
     <ion-chip color="light"> +1 437 247 4802 🇨🇦 </ion-chip> -->
@@ -60,8 +63,88 @@
     <ion-chip color="light"> xprempeh@gmail.com </ion-chip>
     <ion-chip color="light"> xariaprempeh@hotmail.com </ion-chip> -->
     <br>
-    <ion-button color="medium"> <ion-icon name="add"> </ion-icon></ion-button>
+    <ion-button color="medium" (click)="updateInfo()">
+      <ion-icon name="add"></ion-icon>
+    </ion-button>
   </div>
+
+  <ion-modal
+    [isOpen]="isModalOpen"
+    [backdropDismiss]="false"
+    [backdropBreakpoint]="0.75"
+    [initialBreakpoint]="0.50"
+    [breakpoints]="[0.25, 0.5, 0.75, 1.0]"
+  >
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-button (click)="updateMailStatus('unread')">
+              <ion-icon slot="icon-only" name="medal"></ion-icon>
+            </ion-button>
+            <ion-button (click)="updateMailStatus('toogle')">
+              <ion-icon slot="icon-only" name={{mailStatus}}></ion-icon>
+            </ion-button>
+          </ion-buttons>
+      
+          <ion-buttons slot="end">
+            <ion-button (click)="changeLanguage()">
+              <ion-icon slot="icon-only" name="language"></ion-icon>
+            </ion-button>
+            <ion-button>
+              <ion-icon slot="icon-only" name="information-circle"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content class="mailbox">
+       
+        <ion-card style="width:fit-content" *ngIf="modalData == 'mail'">
+          <ion-item lines="none" color="lilac">App Information</ion-item>
+          <ion-item lines="none">Created By: Xaria Prempeh</ion-item>
+          <ion-item lines="none">Project Began: June 28, 2022</ion-item>
+          <ion-item lines="none">Last Update: August 25, 2022</ion-item>
+        </ion-card>
+
+        <div *ngIf="modalData == 'profileEdit'">
+          <ion-item>
+            <ion-label position="fixed" color="lilac" clearInput>Name</ion-label>
+            <ion-input [(ngModel)]="userName"></ion-input>
+          </ion-item>
+          <ion-item lines="none" (click)="showDatePicker = !showDatePicker">
+            <ion-label position="fixed" color="lilac" clearInput>{{getLabel("bday")}}</ion-label>
+            {{getBDay()}}
+            <ion-chip slot="end">
+              <span *ngIf="!showDatePicker"> Change date </span>
+              <span *ngIf="showDatePicker"> Enter </span>
+            </ion-chip>
+          </ion-item>
+          <ion-item *ngIf="showDatePicker">
+            <div style="margin: auto;">
+              <ion-datetime
+                presentation="date"
+                [(ngModel)]="userBDay"
+                value="2000-01-01T00:00:00"
+              ></ion-datetime>
+            </div>
+          </ion-item>
+
+          <div style="text-align: center;">
+            <ion-button color="lilac" (click)="deleteUser()">
+              <ion-icon slot="start" name="close-circle"></ion-icon>
+              Delete Profile
+            </ion-button>
+            <ion-button color="lilac" (click)="saveUser()">
+              <ion-icon slot="start" name="save"></ion-icon>
+              Save Profile
+            </ion-button>
+          </div>
+        </div>
+      
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 
   <ion-fab vertical="bottom" horizontal="center" edge slot="fixed">
     <ion-fab-button color="medium" (click)="exit()">
@@ -83,8 +166,8 @@
       <ion-button (click)="updateMailStatus('unread')">
         <ion-icon slot="icon-only" name="medal"></ion-icon>
       </ion-button>
-      <ion-button (click)="user.retrieveUser()">
-        <ion-icon slot="icon-only" name=mail></ion-icon>
+      <ion-button (click)="updateMailStatus('toogle')">
+        <ion-icon slot="icon-only" name={{mailStatus}}></ion-icon>
       </ion-button>
     </ion-buttons>
 
