@@ -220,4 +220,24 @@ export class ProfilePage implements OnInit {
     if (this.colorID == this.colours.length)
       this.colorID = 0;
   }
+
+  jobID = 1;
+  jobs = [
+    "Unknown",
+    "University Student",
+    "Highschool Student",
+    "Primary school student",
+    "Teacher",
+    "Software Engineer",
+  ]
+
+  changeJob(){
+    this.jobID++;
+    if (this.jobID == this.jobs.length){
+      this.jobID = 0;
+    }
+  }
+  getJob(){
+    return this.jobs[this.jobID];
+  }
 }

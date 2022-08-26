@@ -21,10 +21,14 @@ ion-modal {
 }
 
 #defaultPic{
-    height: 200px;
-    width:200px;
+    height: 205px;
+    width:205px;
     margin:auto;
     background: linear-gradient(150deg, white, lightpink, skyblue, white);
+    // border: 5px solid white;
+    border: 5px inset;
+    // border-left-color: black;
+    // border-top-color: black;
 }
 
 .fadeIn {
