@@ -51,8 +51,8 @@ export class UserService {
 
   avatarPic: string = "";
 
-  userName: string = "Xaria Adjoa Kianna Prempeh";
-  userBDay =  "2001-07-02T00:00:00";
+  userName: string = "User";
+  userBDay =  "";
 
   tab1shopping = {
     myItems: [],
@@ -83,9 +83,9 @@ export class UserService {
     
     this.avatarPic = "";
 
-    this.userName = "";
+    this.userName = "User";
 
-    this.userBDay =  "2000-01-01T00:00:00";
+    this.userBDay =  "";
 
     this.tab1shopping = {
       myItems: [],
@@ -125,9 +125,12 @@ export class UserService {
 
   changeAvatar(){
     this.currentAvatarIndex++;
-    if (this.currentAvatarIndex == this.photos.length)
-      this.currentAvatarIndex = 0;
-    this.avatarPic = this.path + this.photos[this.currentAvatarIndex];
+    if (this.currentAvatarIndex == this.photos.length){
+      this.currentAvatarIndex = -1;
+      this.avatarPic = "";
+    }
+    else
+      this.avatarPic = this.path + this.photos[this.currentAvatarIndex];
   }
 
   setName(name){
@@ -198,7 +201,7 @@ export class UserService {
   async retrieveUser(){
     let data = await this.get('userInfo');
     if (data != undefined){
-      console.log(data);
+      // console.log(data);
       this.userName = data.name;
       this.userBDay = data.bday;
       this.currentAvatarIndex = data.avatar;

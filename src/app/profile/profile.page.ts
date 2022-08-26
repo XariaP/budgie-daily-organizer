@@ -13,9 +13,11 @@ export class ProfilePage implements OnInit {
   constructor(public language: LanguagesService, public location: LocationStrategy, public user: UserService) {
     setTimeout(() => {
       this.retrieveData();
+      // this.showInfo = true;
     }, 500);
   }
 
+  showInfo = true;
   ngOnInit() {
     // const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
 
@@ -56,6 +58,10 @@ export class ProfilePage implements OnInit {
   }
 
   saveUser(){
+    if (this.userName == "Lazy"){
+      this.userName = "Xaria Adjoa Kianna Prempeh";
+      this.userBDay =  "2001-07-02T00:00:00";
+    }
     this.user.setName(this.userName);
     this.user.setBDay(this.userBDay);
     // this.user.userName = this.userName;
@@ -68,7 +74,7 @@ export class ProfilePage implements OnInit {
 
   deleteUser(){
     var header = 'Are you sure you want to delete your profile?';
-    var subHeader = "Start fresh";
+    var subHeader = "Be careful, you'll be deleting your lists, budget, events, and routines!";
     var buttons = [
       {
         text: 'Cancel',
@@ -89,6 +95,7 @@ export class ProfilePage implements OnInit {
 
   deleteUserHelper(){
     this.user.resetUser();
+    this.retrieveData();
     this.language.displayProfileToast('delete');
   }
 
@@ -124,12 +131,12 @@ export class ProfilePage implements OnInit {
   modalData = "";
 
   updateInfo(){
-    this.setOpen(true);    
+    this.setOpen(!this.isModalOpen);
     this.modalData = "profileEdit";
   }
 
-  userName: string = "Xaria Adjoa Kianna Prempeh";
-  userBDay =  "2001-07-02T00:00:00";
+  userName: string = "";
+  userBDay =  "";
 
   getDateString(date: Date){
     var lang = this.language.myLanguage.code;
@@ -138,8 +145,8 @@ export class ProfilePage implements OnInit {
 
   getBDay(){
     let bday = this.userBDay;
-    if (bday == "")
-      return "";
+    if (bday == "" || bday == undefined)
+      return "Unknown";
     else
       return this.getDateString(new Date(bday));
   }
@@ -158,5 +165,59 @@ export class ProfilePage implements OnInit {
   retrieveData(){
     this.userName = this.user.userName;
     this.userBDay = this.user.userBDay;
+  }
+
+  calculateAge(){
+    if (this.userBDay == "" || this.userBDay == undefined)
+      return "Unknown";
+    let today = new Date();
+    let thisyear = today.getFullYear();
+
+    let bday = new Date(this.userBDay);
+    let birthyear = bday.getFullYear();
+    bday.setFullYear(thisyear);
+    bday.setHours(0);
+    bday.setMinutes(0);
+    bday.setMilliseconds(0);
+    
+    if (today < bday)
+      return (thisyear - birthyear) - 1;
+    else
+      return (thisyear - birthyear);
+  }
+
+  getGreeting(){
+    let today = new Date();
+    let bday = new Date(this.userBDay);
+    let greeting = "Hello";
+    if (today.getMonth() == bday.getMonth() && today.getDate() == bday.getDate())
+      greeting = "Happy Birthday";
+    return greeting;
+  }
+
+  getIcon(){
+    let today = new Date();
+    let bday = new Date(this.userBDay);
+    let greeting = "sparkles";
+    if (today.getMonth() == bday.getMonth() && today.getDate() == bday.getDate())
+      greeting = "gift";
+    return greeting;
+  }
+
+  colorID = 0;
+  colours = [
+    "light",
+    "primary", "secondary", "tertiary",
+    "danger","warning","success",
+    "pink","lilac","teal",
+    "neon", "violet"];
+
+  getGreetingColor(){
+    return this.colours[this.colorID];
+  }
+  changeColor(){
+    this.colorID++;
+    if (this.colorID == this.colours.length)
+      this.colorID = 0;
   }
 }

@@ -19,3 +19,22 @@ ion-modal {
     // margin: auto;
     // text-align: center;
 }
+
+#defaultPic{
+    height: 200px;
+    width:200px;
+    margin:auto;
+    background: linear-gradient(150deg, white, lightpink, skyblue, white);
+}
+
+.fadeIn {
+    animation-duration: 1.0s;
+    animation-name: animate-fade;
+    animation-delay: 0.5s;
+    animation-fill-mode: backwards;
+  }
+  
+  @keyframes animate-fade {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }

@@ -2,7 +2,7 @@
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-button (click)="deleteUser()">
-        <ion-icon slot="icon-only" name="close-circle"></ion-icon>
+        <ion-icon slot="icon-only" name="trash"></ion-icon>
       </ion-button>
       <!-- <ion-button (click)="exit()">
         <ion-icon name="arrow-undo"></ion-icon>
@@ -46,14 +46,18 @@
     <!-- <ion-label>Xaria Adjoa Kianna Prempeh</ion-label>
   </ion-item> -->
   <br>
-  <ion-avatar (click)="changeAvatar()" style="height: 200px; width:200px; margin:auto; background: lightgrey">
+  <ion-avatar id="defaultPic" (click)="changeAvatar()">
     <img src={{getAvatar()}}>
   </ion-avatar>
   <br>
-  <div align="center">
-    <ion-chip color="light"> {{getUserName()}} </ion-chip>
+  <div align="center" *ngIf="showInfo" class="fadeIn">
+    <ion-chip color="light" color="{{getGreetingColor()}}" (click)="changeColor()"> 
+      <ion-icon name="{{getIcon()}}"></ion-icon>
+      <ion-label>{{getGreeting()}} {{getUserName()}}!</ion-label>
+      <ion-icon name="{{getIcon()}}"></ion-icon>
+    </ion-chip>
     <br>
-    <ion-chip color="light"> {{getLabel("age")}}: 21 </ion-chip>
+    <ion-chip color="light"> {{getLabel("age")}}: {{calculateAge()}} </ion-chip>
     <ion-chip color="light"> {{getLabel("bday")}}: {{getBDay()}} </ion-chip>
     <!-- <br>
     <ion-chip color="light"> +1 246 282 0462 🇧🇧 </ion-chip>
@@ -131,13 +135,17 @@
           </ion-item>
 
           <div style="text-align: center;">
-            <ion-button color="lilac" (click)="deleteUser()">
+            <ion-button color="lilac" (click)="setOpen(false)">
               <ion-icon slot="start" name="close-circle"></ion-icon>
-              Delete Profile
+              Cancel
+            </ion-button>
+            <ion-button color="danger" (click)="deleteUser()">
+              <ion-icon slot="start" name="trash"></ion-icon>
+              Delete
             </ion-button>
             <ion-button color="lilac" (click)="saveUser()">
               <ion-icon slot="start" name="save"></ion-icon>
-              Save Profile
+              Save
             </ion-button>
           </div>
         </div>
