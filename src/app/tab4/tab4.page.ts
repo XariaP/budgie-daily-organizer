@@ -20,6 +20,8 @@ export class Tab4Page implements OnInit {
     setTimeout(() => {
       this.retrieveData();
     }, 500);
+    
+    this.user.removeFading();
   }
 
   today: Date = new Date();
@@ -140,10 +142,14 @@ export class Tab4Page implements OnInit {
   }
 
   getStartTime(timeslot){
+    if (timeslot.starttime == undefined)
+      return "Anytime";
     return this.getTime(new Date(timeslot.starttime));
   }
 
   getEndTime(timeslot){
+    if (timeslot.endtime == undefined)
+      return "Anytime";
     return this.getTime(new Date(timeslot.endtime));
   }
 
@@ -220,10 +226,10 @@ export class Tab4Page implements OnInit {
     {val: "Routine", color: "danger"},
     {val: "Work", color: "neon"},
     {val: "School", color: "success"},
-    {val: "Recreation", color: "pink"},
     {val: "Break", color: "lilac"},
-    {val: "Hobby", color: "teal"},
     {val: "Club", color: "violet"},
+    {val: "Hobby", color: "pink"},
+    {val: "Miscellaneous", color: "teal"},
   ];
 
   isModalOpen: boolean = false;
@@ -282,10 +288,10 @@ export class Tab4Page implements OnInit {
 
   saveRoutine(){
     for (let i = 0; i < this.timeslots.length; i++){
-      if (!this.timeslots[i].starttime || !this.timeslots[i].endtime){
-        this.language.displayTab4Toast('invalidTime');
-        return;
-      }
+      // if (!this.timeslots[i].starttime || !this.timeslots[i].endtime){
+      //   this.language.displayTab4Toast('invalidTime');
+      //   return;
+      // }
     }
     this.setOpen(false);
 

@@ -5,10 +5,23 @@ ion-content {
         rgb(230, 171, 210), 
         rgb(255, 99, 182)
     );
+    // --background: linear-gradient(
+    //     150deg,
+    //     rgb(248, 209, 167), 
+    //     rgb(237, 174, 111),
+    //     rgb(255, 99, 99)
+    // );
+    // --background: linear-gradient(
+    //     150deg,
+    //     rgb(235, 170, 170), 
+    //     rgb(237, 119, 119), 
+    //     rgb(244, 62, 62)
+    // );
 }
 
 ion-toolbar{
     --background: rgba(173, 52, 133, 0.449);
+    // --background: rgba(255, 0, 0, 0.449);
     color: white;
     text-align: center;
 }

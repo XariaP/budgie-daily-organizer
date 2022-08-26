@@ -23,9 +23,10 @@
 
   <ion-button class="custom" expand="full" fill="outline" color="light" (click)="changeDay()">{{getDayOfWeek(currentDay)}}</ion-button>
 
-  <div *ngIf="currentDay != -1">
-    <ion-reorder-group (ionItemReorder)="doReorder($event)" disabled="false">
+  <div *ngIf="currentDay != -1" class="fadeIn">
+    <!-- <ion-reorder-group (ionItemReorder)="doReorder($event)" disabled="false"> -->
       <div *ngFor="let card of routines">
+        <ion-reorder-group (ionItemReorder)="doReorder($event)" disabled="false">
         <div *ngFor="let timeslot of card.timeslots">
           <ion-card *ngIf="checkToday(timeslot)">
             <ion-reorder>
@@ -41,8 +42,9 @@
             </ion-reorder>
           </ion-card>
         </div>
+        </ion-reorder-group>
       </div>
-    </ion-reorder-group>
+    <!-- </ion-reorder-group> -->
   </div>
 
   <ion-fab vertical="bottom" horizontal="center" edge slot="fixed">
@@ -56,7 +58,7 @@
   
   <div *ngIf="currentDay == -1">
     <ion-card *ngFor="let card of routines; let r = index">
-      <ion-item color="{{card.tag.color}}" (click)="editOrDelete(r)">
+      <ion-item lines="none" color="{{card.tag.color}}" (click)="editOrDelete(r)">
         <ion-icon *ngIf="edit" name="brush"></ion-icon>
         <ion-icon *ngIf="!edit" name="trash"></ion-icon>
         <span style="margin:10px;">{{card.what}}</span>
