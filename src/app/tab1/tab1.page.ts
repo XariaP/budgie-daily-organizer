@@ -13,6 +13,7 @@ export class Tab1Page {
     setTimeout(() => {
       this.retrieveData();
     }, 500);
+    this.user.removeFading();
   }
 
   getLabel(name){

@@ -13,6 +13,8 @@ export class Tab3Page {
     setTimeout(() => {
       this.retrieveData();
     }, 500);
+    
+    this.user.removeFading();
     // this.dates = [
     //   {
     //     date: new Date(2022, 8 - 1, 6), // "Aug 06 2022",

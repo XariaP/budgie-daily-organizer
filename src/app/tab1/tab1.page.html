@@ -26,13 +26,13 @@
   </ion-header>
 
   <div style="height: 10px;"></div>
-  <div align="center">
+  <div align="center" class="fadeIn">
     <!-- <ion-chip (click)="show = 'All'" color="{{determineSelected('All')}}">All</ion-chip> -->
     <ion-chip *ngFor="let label of categories; let i = index" (click)="selectList(i)" color="{{determineSelected(i)}}">{{label.name}}</ion-chip>
     <ion-chip (click)="addList()">New List<ion-icon name="add"></ion-icon></ion-chip>
   </div>
   
-  <div *ngFor="let item of myItems">
+  <div *ngFor="let item of myItems" class="fadeIn">
   <ion-card *ngIf="determineShow(item)">
     <ion-item lines="none" (click)="selectItem(item, edit)">
       <ion-chip (click)="setEdit()" color={{checkSelected(item)}}> {{item.quantity}} </ion-chip>

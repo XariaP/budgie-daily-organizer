@@ -17,6 +17,8 @@ export class Tab2Page {
     setTimeout(() => {
       this.retrieveData();
     }, 500);
+    
+    this.user.removeFading();
   }
 
   // Convert date to string given format

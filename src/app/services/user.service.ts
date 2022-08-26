@@ -259,4 +259,15 @@ export class UserService {
     if (data != undefined)
       this.tab4routines = data;
   }
+
+  removeFading(){
+    setTimeout(() => {
+      let fades = document.getElementsByClassName("fadeIn");
+      let length = fades.length;
+      while(length != 0){
+        fades[0].setAttribute("class", "noFade");
+        length--;
+      }
+    }, 1500);
+  }
 }

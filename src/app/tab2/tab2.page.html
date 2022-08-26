@@ -79,7 +79,7 @@
             <ion-button expand="full" fill="outline" (click)="addSpending()">Spending</ion-button>
             <!-- clear outline solid -->
             <ion-item> <ion-label>$</ion-label>
-              <span *ngIf="!projectLimits"> {{getAmt(mySpending)}} </span>
+              <span *ngIf="!projectLimits" class="fadeIn"> {{getAmt(mySpending)}} </span>
               <span *ngIf="projectLimits"> {{showProjection()}} </span>
             </ion-item>
           </ion-card>
@@ -89,7 +89,7 @@
             <!-- <ion-item>Savings</ion-item> -->
             <ion-button expand="full" fill="outline" (click)="addSavings()">Savings</ion-button>
             <ion-item><ion-label>$</ion-label>
-              {{getAmt(mySavings)}}
+              <span class="fadeIn">{{getAmt(mySavings)}}</span>
             </ion-item>
           </ion-card>
         </ion-col>

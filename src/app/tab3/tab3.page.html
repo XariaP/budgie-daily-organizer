@@ -46,7 +46,7 @@
     <span *ngIf="showPast"> Show Upcoming Events</span>
   </ion-button>
 
-  <div *ngIf="show=='chat'">
+  <!-- <div *ngIf="show=='chat'">
     <ion-item lines="none" color="clear">
       <ion-avatar><img src="../../assets/dessert-7.jpg"></ion-avatar>
       <ion-item color="clear">Hello</ion-item>
@@ -55,16 +55,16 @@
       <ion-item slot="end" color="clear">Hello!</ion-item>
       <ion-avatar slot="end"><img src="../../assets/mafumafu-1.png"></ion-avatar>
     </ion-item>
-  </div>
+  </div> -->
 
-  <ion-card *ngFor="let c of courses; let i = index" (click)="removeCourse(i)">
+  <!-- <ion-card *ngFor="let c of courses; let i = index" (click)="removeCourse(i)">
     <ion-item lines="none" color="{{colorCourse(c)}}">
       {{getCourse(c)}}
     </ion-item>
-  </ion-card>
+  </ion-card> -->
  
   <!-- <ion-button color="tertiary" fill="outline">August 13</ion-button> -->
-  <span *ngIf="listBy=='dates'">
+  <span *ngIf="listBy=='dates'" class="fadeIn">
     <div *ngFor="let d of dates">
       <ion-grid *ngIf="checkEvents(d.date)">
         <ion-row>
