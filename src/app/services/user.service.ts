@@ -53,6 +53,7 @@ export class UserService {
 
   userName: string = "User";
   userBDay =  "";
+  userJobID = 0;
 
   tab1shopping = {
     myItems: [],
@@ -86,6 +87,8 @@ export class UserService {
     this.userName = "User";
 
     this.userBDay =  "";
+
+    this.userJobID = 0;
 
     this.tab1shopping = {
       myItems: [],
@@ -139,6 +142,10 @@ export class UserService {
 
   setBDay(date){
     this.userBDay = date;
+  }
+
+  setJobID(ID){
+    this.userJobID = ID;
   }
 
   setTab1Info(info){
@@ -205,6 +212,10 @@ export class UserService {
       this.userName = data.name;
       this.userBDay = data.bday;
       this.currentAvatarIndex = data.avatar;
+      if (data.jobID == undefined)
+        this.userJobID = 0;
+      else
+        this.userJobID = data.jobID;
     }
     if (this.currentAvatarIndex == -1)
       this.avatarPic = "";
@@ -216,7 +227,8 @@ export class UserService {
     this.set('userInfo', {
       avatar: this.currentAvatarIndex,
       name: this.userName,
-      bday: this.userBDay
+      bday: this.userBDay,
+      jobID: this.userJobID,
     });
   }
 

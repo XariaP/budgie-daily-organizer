@@ -61,9 +61,11 @@ export class ProfilePage implements OnInit {
     if (this.userName == "Lazy"){
       this.userName = "Xaria Adjoa Kianna Prempeh";
       this.userBDay =  "2001-07-02T00:00:00";
+      this.jobID = 1;
     }
     this.user.setName(this.userName);
     this.user.setBDay(this.userBDay);
+    this.user.setJobID(this.jobID);
     // this.user.userName = this.userName;
     // this.user.userBDay = this.userBDay;
 
@@ -165,6 +167,7 @@ export class ProfilePage implements OnInit {
   retrieveData(){
     this.userName = this.user.userName;
     this.userBDay = this.user.userBDay;
+    this.jobID = this.user.userJobID;
   }
 
   calculateAge(){
