@@ -11,14 +11,13 @@ import { IonModal } from '@ionic/angular';
 })
 export class Tab2Page {
   constructor(public language: LanguagesService, public user: UserService) {
-    this.date = new Date();
-    this.date.setDate(1);
-    this.exactdate = new Date();
     setTimeout(() => {
       this.retrieveData();
     }, 500);
-    
     this.user.removeFading();
+    this.date = new Date();
+    this.date.setDate(1);
+    this.exactdate = new Date();
   }
 
   // Convert date to string given format

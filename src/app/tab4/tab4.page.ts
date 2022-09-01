@@ -45,6 +45,8 @@ export class Tab4Page implements OnInit {
 
   routines: Array<{
     what: string,
+    location: string,
+    desc: string,
     timeslots: Array<{
       starttime: Date,
       endtime: Date,
@@ -67,7 +69,7 @@ export class Tab4Page implements OnInit {
     this.timeslots = [];
     this.addTimeslot()
     this.activity = "";
-    this.tagID = 0;
+    this.tag = "Routine danger";
   }
 
   moreTime(){
@@ -89,7 +91,12 @@ export class Tab4Page implements OnInit {
     let subHeader = "";
     let buttons = [
       // {text: 'Cancel', role: 'cancel'},
-      // {text: 'All'},
+      {
+        text: 'Select',
+        cssClass: "alertButton",
+        handler: choice => {
+        this.currentDay = choice;
+      }},
       {
         text: 'Today',
         cssClass: "alertButton",
@@ -97,11 +104,11 @@ export class Tab4Page implements OnInit {
         this.currentDay = this.today.getDay();
       }},
       {
-        text: 'Select',
-        cssClass: "alertButton",
-        handler: choice => {
-        this.currentDay = choice;
-      }}
+        text: 'View All Routines',
+        cssClass: 'alertButton',
+        handler:() => {
+          this.currentDay = -1;
+      }},
     ];
     let inputs = [
     //   {
@@ -209,17 +216,17 @@ export class Tab4Page implements OnInit {
   }
 
   showAll(){
-    if (this.currentDay != -1){
-      this.currentDay = -1;
-      this.language.displayTab4Toast('all');
-    }
-    else{
+    // if (this.currentDay != -1){
+    //   this.currentDay = -1;
+    //   this.language.displayTab4Toast('all');
+    // }
+    // else{
       this.collapse = !this.collapse;
       if (this.collapse)
-        this.language.displayTab4Toast('expand');
-      else
         this.language.displayTab4Toast('mini');
-    }
+      else
+        this.language.displayTab4Toast('expand');
+    // }
   }
 
   saved_tags: any = [
@@ -240,6 +247,10 @@ export class Tab4Page implements OnInit {
 
   activity: string = "";
 
+  location: string = "";
+
+  description: string = "";
+
   timeslots: Array<{
     starttime: Date,
     endtime: Date,
@@ -251,7 +262,7 @@ export class Tab4Page implements OnInit {
     active: boolean,
   }> = [];
 
-  tagID: number = 0;
+  tag = this.saved_tags[0].val + " " + this.saved_tags[0].color;
 
   addTimeslot(){
     let newslot = {
@@ -297,10 +308,21 @@ export class Tab4Page implements OnInit {
 
     this.routines.push({
       what: this.activity,
+      location: this.location,
+      desc: this.description,
       timeslots: this.timeslots,
-      tag: this.saved_tags[this.tagID],
+      tag: this.createTag(this.tag),
     });
     this.saveData();
+  }
+
+  createTag(tagInfo){
+    let data = tagInfo.split(" ");
+    return {val: data[0], color: data[1]};
+  }
+
+  createTagString(tag){
+    return tag.val + " " + tag.color;
   }
 
   lastSave = undefined;
@@ -335,7 +357,9 @@ export class Tab4Page implements OnInit {
     this.setOpen(true);
     this.timeslots = this.routines[ID].timeslots;
     this.activity = this.routines[ID].what;
-    this.tagID = this.saved_tags.indexOf(this.routines[ID].tag);
+    this.location = this.routines[ID].location;
+    this.description = this.routines[ID].desc;
+    this.tag = this.createTagString(this.routines[ID].tag);
     this.lastSave = {ID: ID, data: this.routines[ID]};
     this.deleteRoutineHelper(ID);
   }
@@ -375,7 +399,7 @@ export class Tab4Page implements OnInit {
   }
 
   getCurrentRoutineColor(){
-    return this.saved_tags[this.tagID].color;
+    return this.createTag(this.tag).color;
   }
 
   retrieveData(){
@@ -389,5 +413,40 @@ export class Tab4Page implements OnInit {
 
   getAvatar(){
     return this.user.getAvatar();
+  }
+
+
+  getLocation(card){
+    let location = card.location;
+    if (location == "" || location == undefined)
+      return "";
+    else
+      return "(" + location + ")";
+  }
+
+  getDesc(card){
+    return card.desc;
+  }
+
+  clearAll(){
+    var header = 'Are you sure you want to delete all routines?';
+    var subHeader = "";
+    var buttons = [
+      {
+        text: 'Cancel',
+        role: 'cancel',
+        cssClass: 'alert-button-cancel'
+      },
+      {
+        text:'OK',
+        handler: () => {  
+          this.routines = [];
+          this.saveData();
+        },
+        cssClass: 'alert-button-confirm'
+      }
+    ]
+    var inputs = [];
+    this.language.presentAlert({header, subHeader, buttons, inputs});
   }
 }

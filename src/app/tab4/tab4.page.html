@@ -20,20 +20,20 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-
   <ion-button class="custom" expand="full" fill="outline" color="light" (click)="changeDay()">{{getDayOfWeek(currentDay)}}</ion-button>
 
   <div *ngIf="currentDay != -1" class="fadeIn">
-    <!-- <ion-reorder-group (ionItemReorder)="doReorder($event)" disabled="false"> -->
+    <ion-reorder-group (ionItemReorder)="doReorder($event)" disabled="false">
       <div *ngFor="let card of routines">
-        <ion-reorder-group (ionItemReorder)="doReorder($event)" disabled="false">
+        <!-- <ion-reorder-group (ionItemReorder)="doReorder($event)" disabled="false"> -->
         <div *ngFor="let timeslot of card.timeslots">
           <ion-card *ngIf="checkToday(timeslot)">
             <ion-reorder>
               <ion-item color="light">
                 <ion-icon slot="end" color="danger" name="alert" *ngIf="betweenTime(timeslot.starttime, timeslot.endtime)"></ion-icon>
-                <ion-label>{{card.what}}</ion-label>
+                <ion-label>{{card.what}} {{getLocation(card)}}</ion-label>
               </ion-item>
+              <ion-item *ngIf="card.desc != '' && !collapse">{{getDesc(card)}}</ion-item>
               <ion-item color="light">
                 <ion-badge slot="end" color="{{card.tag.color}}">{{card.tag.val}}</ion-badge>
                 <ion-chip color="{{card.tag.color}}">{{getStartTime(timeslot)}}</ion-chip>
@@ -42,9 +42,9 @@
             </ion-reorder>
           </ion-card>
         </div>
-        </ion-reorder-group>
+        <!-- </ion-reorder-group> -->
       </div>
-    <!-- </ion-reorder-group> -->
+    </ion-reorder-group>
   </div>
 
   <ion-fab vertical="bottom" horizontal="center" edge slot="fixed">
@@ -67,9 +67,16 @@
         <!-- <span *ngIf="collapse">
           <ion-badge *ngFor="let day of time.days"><span *ngIf="day.checked">{{day.short}}</span></ion-badge>
         </span> -->
-
       </ion-item>
       <div *ngIf="!collapse">
+        <ion-item lines="none" color="light" *ngIf="card.location != ''">
+          <!-- <ion-chip color="{{card.tag.color}}">Where?</ion-chip> -->
+          {{card.location}}
+        </ion-item>
+        <ion-item lines="none" color="light" *ngIf="card.desc != ''">
+          <!-- <ion-chip color="{{card.tag.color}}">What?</ion-chip> -->
+          {{getDesc(card)}}
+        </ion-item>
         <div *ngFor="let time of card.timeslots">
           <div *ngFor="let day of time.freq_active.days; let d = index">
             <ion-item color="light" *ngIf="day">
@@ -83,6 +90,9 @@
     </ion-card>
   </div>
 
+  <div style="margin: auto; width: fit-content;">
+    <ion-button color="light" fill="outline" (click)="clearAll()">Clear All</ion-button>
+  </div>
 
   <ion-modal [isOpen]="isModalOpen">
     <ng-template>
@@ -106,22 +116,31 @@
 
       <ion-content>
         <ion-item lines="none" color="{{getCurrentRoutineColor()}}">
-          <ion-label>Activity Name</ion-label>
+          <ion-label>Activity Information</ion-label>
         </ion-item>
         <ion-item color="light">
-          <!-- <ion-label>Activity Name</ion-label> -->
+          <ion-label color="{{getCurrentRoutineColor()}}">Name</ion-label>
           <ion-input [(ngModel)]="activity" placeholder="Enter activity here"></ion-input>
+        </ion-item>
+        <ion-item color="light">
+          <ion-label color="{{getCurrentRoutineColor()}}">Location</ion-label>
+          <ion-input [(ngModel)]="location" placeholder="(optional)"></ion-input>
+        </ion-item>
+        <ion-item color="light">
+          <ion-label color="{{getCurrentRoutineColor()}}">Description</ion-label>
+          <ion-input [(ngModel)]="description" placeholder="(optional)"></ion-input>
         </ion-item>
 
         <ion-item lines="none" color="{{getCurrentRoutineColor()}}">
-          <ion-label>Tag</ion-label>
+          <ion-label>Category</ion-label>
         </ion-item>
         <ion-list>
         <!-- style="height: 200px; overflow: scroll;">     -->
-          <ion-radio-group value="0" [(ngModel)]="tagID">
+          <ion-radio-group value="Routine danger" [(ngModel)]="tag">
             <ion-item *ngFor="let tag_opt of saved_tags; let i=index">
               <ion-label>{{tag_opt.val}}</ion-label>
-              <ion-radio slot="start" value="{{i}}" color="{{tag_opt.color}}"></ion-radio>
+              <!-- <ion-input [(ngModel)]="{{tag_opt.val}}"></ion-input> -->
+              <ion-radio slot="start" value="{{tag_opt.val}} {{tag_opt.color}}" color="{{tag_opt.color}}"></ion-radio>
             </ion-item>
           </ion-radio-group>
         </ion-list>
@@ -174,8 +193,9 @@
             <ion-button color="light">Today: August 15</ion-button>
           </ion-buttons> -->
           <ion-buttons slot="end">
-            <ion-button color="light" (click)="cancel()">Dismiss</ion-button>
+            <ion-button color="light" (click)="saveRoutine()">Save</ion-button>
           </ion-buttons>
+          
         </ion-toolbar>
       </ion-footer>
     </ng-template>
