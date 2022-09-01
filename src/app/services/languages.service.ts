@@ -239,7 +239,7 @@ export class LanguagesService {
         icon = "today";
         break;
     }
-    this.presentToast(message, 2000, icon, "middle", "light");
+    this.presentToast(message, 2000, icon, "top", "light");
   }
 
   displayTab4Toast(type){

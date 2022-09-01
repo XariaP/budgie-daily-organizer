@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { IonReorderGroup, ItemReorderEventDetail } from '@ionic/angular';
 import { LanguagesService } from '../services/languages.service';
 import { UserService } from '../services/user.service';
 
@@ -8,6 +9,8 @@ import { UserService } from '../services/user.service';
   styleUrls: ['tab3.page.scss']
 })
 export class Tab3Page {
+  
+  @ViewChild(IonReorderGroup) reorderGroup: IonReorderGroup;
 
   constructor(public language: LanguagesService, public user: UserService) {
     setTimeout(() => {
@@ -195,16 +198,17 @@ export class Tab3Page {
 
   dates: Array<{
     date: Date,
-    eventIDs: number[],
+    // eventIDs: number[],
+    eventIDs: any[],
     active: boolean
   }> = [];
 
   dateToString(date){
+    date = new Date(date);
     var locale = this.language.myLanguage.code;
     var options = {month: 'short', day: '2-digit', year: 'numeric'};
     return date.toLocaleString(locale, options);
   }
-
 
   events: Array<{
     what: string
@@ -216,18 +220,22 @@ export class Tab3Page {
   }> = [];
   
   getEventsByID(eventIDs){
-    var result = [];
-    for (let i in eventIDs){
-      result.push(this.events[eventIDs[i]]);
-    }
-    return result;
+    // var result = [];
+
+    // for (let i in eventIDs){
+    //   result.push(this.events[eventIDs[i]]);
+    // }
+    // return result;
+
+    return eventIDs;
   }
 
   setActive(date){
     // var events = this.getEventsByID(date);
     for (let i in date.eventIDs){
-      let id = date.eventIDs[i];
-      this.events[id].active = !this.events[id].active;
+      // let id = date.eventIDs[i];
+      // this.events[id].active = !this.events[id].active;
+      date.eventIDs[i].active = !date.eventIDs[i].active;
     }
     // date.active = !date.active;
   }
@@ -287,6 +295,7 @@ export class Tab3Page {
   showPast = false;
 
   checkEvents(date){
+    date = new Date(date);
     if (this.showPast){
       return this.checkIfPastDate(date);
     }
@@ -331,7 +340,7 @@ export class Tab3Page {
   eventTitle: string = "";
   eventPeople: string = "";
   eventLocation: string = "";
-  eventDate: Date = undefined;
+  eventDate = undefined;
   eventAllDay: boolean = true;
   eventDateString: string = "";
   
@@ -387,11 +396,11 @@ export class Tab3Page {
 
   editEvent(event, eventID){
     this.copyEvent(event);
-    this.deleteEvent(eventID);
+    this.deleteEventHelper(event);
   }
 
-  deleteEvent(eventID){ //combine all alert presnters
-    var header = 'Are you sure you want to delete this event "' + this.events[eventID].what + '"?';
+  deleteEvent(event){ //combine all alert presnters
+    var header = 'Are you sure you want to delete this event "' + event.what + '"?';
     var subHeader = "";
     var buttons = [
       {
@@ -402,7 +411,7 @@ export class Tab3Page {
       {
         text:'OK',
         handler: () => {
-          this.deleteEventHelper(eventID);
+          this.deleteEventHelper(event);
         },
         cssClass: 'alert-button-confirm'
       }
@@ -411,7 +420,7 @@ export class Tab3Page {
     this.language.presentAlert({header, subHeader, buttons, inputs});
   }
 
-  deleteEventHelper(eventID){
+  deleteEventHelper(event){
     let placeholder = {
       what: "",
       who: [],
@@ -421,7 +430,8 @@ export class Tab3Page {
       active: false,
     };
 
-    this.deleteEventDate(this.events[eventID].date, eventID);
+    this.deleteEventDate(event.date, event);
+    let eventID = this.events.indexOf(event);
     this.events.splice(eventID, 1, placeholder);
     this.emptyEventSlots.push(eventID);
     
@@ -434,21 +444,21 @@ export class Tab3Page {
     return this.events.indexOf(event);
   }
 
-  deleteEventDate(date, eventID){
+  deleteEventDate(date, event){
     let dateString = this.dateToString(date);
     let dateIndex = this.dateMap.get(dateString);
 
-    let deleteID = this.dates[dateIndex].eventIDs.indexOf(eventID);
-    this.dates[dateIndex].eventIDs.splice(deleteID, 1);
+    let deleteID = dateIndex.eventIDs.indexOf(event);
+    dateIndex.eventIDs.splice(deleteID, 1);
 
-    if (this.dates[dateIndex].eventIDs.length == 0){
+    if (dateIndex.eventIDs.length == 0){
       this.dateMap.delete(dateString);
 
-      this.dates.splice(dateIndex, 1);
-      for (let i = dateIndex; i < this.dates.length; i++){
-        dateString = this.dateToString(this.dates[i].date);
-        this.dateMap.set(dateString, i);
-      }
+      this.dates.splice(this.dates.indexOf(dateIndex), 1);
+      // for (let i = dateIndex; i < this.dates.length; i++){
+      //   dateString = this.dateToString(this.dates[i].date);
+      //   this.dateMap.set(dateString, i);
+      // }
     }
   }
 
@@ -462,7 +472,13 @@ export class Tab3Page {
     this.eventPeople = event.who[0];
     this.eventLocation = event.where;
     this.eventDateString = event.date.toLocaleString();
+    this.eventDate = event.date;
     this.eventAllDay = this.checkIfAllDay(event);
+  }
+
+  dismiss(){
+    // this.saveEvent();
+    this.setOpen(false);
   }
 
   saveEvent(){
@@ -477,39 +493,41 @@ export class Tab3Page {
       who: [this.checkNoInput(this.eventPeople)],
       where: this.checkNoInput(this.eventLocation),
       time: this.extractTime(eventDate),
-      date: new Date(eventDate),
+      date: eventDate,
       active: false,
     };
 
     let eventId = this.events.length;;
     if (this.emptyEventSlots.length != 0){
       eventId = this.emptyEventSlots.pop();
+      this.events.splice(eventId, 1, newEvent);
     }
-
-    this.events.splice(eventId, 1, newEvent);
+    else
+      this.events.push(newEvent);
     
-    this.saveEventDate(new Date(eventDate), eventId);
+    
+    this.saveEventDate(eventDate, newEvent);
 
     this.setOpen(false);
 
     this.saveData();
   }
 
-  saveEventDate(date, eventID){
+  saveEventDate(date, event){
     let dateString = this.dateToString(date);
     let dateIndex = this.dateMap.get(dateString);
     
     if (dateIndex == undefined){
       let newDate = {
         date: new Date(date), // keep new Date()?
-        eventIDs: [eventID],
+        eventIDs: [event],
         active: false,
       };
-      this.dateMap.set(dateString, this.dates.length);
+      this.dateMap.set(dateString, newDate);
       this.dates.push(newDate);
     }
     else{
-      this.dates[dateIndex].eventIDs.push(eventID);
+      dateIndex.eventIDs.push(event);
     }
   }
 
@@ -571,6 +589,21 @@ export class Tab3Page {
     this.events = data.events;
     this.dates = data.dates;
     this.dateMap = data.dateMap;
+
+    // remove after update
+    let dateStr = this.dateToString(this.dates[0].date);
+    if (typeof(this.dateMap.get(dateStr)) === "number"){
+      for (let i = 0; i < this.dates.length; i++){
+        let dateString = this.dateToString(this.dates[i].date);
+        this.dateMap.set(dateString, this.dates[i]);
+
+        let eventIDs = this.dates[i].eventIDs;
+        for (let i = 0; i < eventIDs.length; i++){
+          eventIDs[i] = this.events[eventIDs[i]];
+        }
+      }
+    }
+
     this.emptyEventSlots = data.emptyEventSlots;
   }
   
@@ -584,6 +617,28 @@ export class Tab3Page {
     this.user.saveTab3Info();
   }
 
+  disableReorder: boolean = false;
+  doReorder(ev: CustomEvent<ItemReorderEventDetail>, type) {
+    switch(type){
+      case 'dates':
+        this.dates = ev.detail.complete(this.dates);
+        break;
+      case 'events':
+        this.events = ev.detail.complete(this.events);
+    } 
+  }
+
+  reorderDates(ev: CustomEvent<ItemReorderEventDetail>) {
+    this.doReorder(ev, 'dates');
+  }
+
+  reorderEvents(ev: CustomEvent<ItemReorderEventDetail>) {
+    this.doReorder(ev, 'events');
+  }
+
+  // toggleReorder(){
+  //   this.disableReorder = !this.disableReorder;
+  // }
 }
 
 // "8/6/2022, 12:00:00 AM"
