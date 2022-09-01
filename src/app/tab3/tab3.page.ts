@@ -394,7 +394,7 @@ export class Tab3Page {
     this.setOpen(true);
   }
 
-  editEvent(event, eventID){
+  editEvent(event){
     this.copyEvent(event);
     this.deleteEventHelper(event);
   }
