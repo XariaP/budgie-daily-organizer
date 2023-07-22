@@ -45,17 +45,17 @@
     
     <div *ngIf="segment=='funds'">
       <ion-item class="bar" lines="none">
-        <ion-chip (click)="deductSpending()">
+        <ion-chip (click)="deductSpending()" class="white">
           Spend
           <ion-icon name="remove"></ion-icon>
         </ion-chip>
 
-        <ion-chip (click)="addSavings()">
+        <ion-chip (click)="addSavings()" class="white">
           Deposit
           <ion-icon name="add"></ion-icon>
         </ion-chip>
 
-        <ion-chip (click)="transferFunds()">
+        <ion-chip (click)="transferFunds()" class="white">
           Transfer
           <ion-icon name="send"></ion-icon>
         </ion-chip>
@@ -64,7 +64,7 @@
 
     <div *ngIf="segment=='home'" lines="none">
       <ion-item class="bar" lines="none">
-        <ion-chip (click)="projectLimits = !projectLimits">
+        <ion-chip (click)="projectLimits = !projectLimits"  class="white">
           <span *ngIf="!projectLimits"> Show Projected Values </span>
           <span *ngIf="projectLimits"> Hide Projected Values </span>
         </ion-chip>
@@ -202,7 +202,7 @@
   <div *ngIf="segment=='limits'">
     
     <ion-item class="bar" lines="none">
-      <ion-chip (click)="addLimit()">
+      <ion-chip (click)="addLimit()" class="white">
         Add Limit <ion-icon name="card"></ion-icon>
       </ion-chip>
     </ion-item>
@@ -231,17 +231,17 @@
               <ion-row>
                 <ion-col>
                   <div style="text-align: left;">
-                    <ion-chip color="dark" style="color: black;"> {{b.purpose}} </ion-chip>
+                    <ion-chip color="dark"> {{b.purpose}} </ion-chip>
                   </div>
                 </ion-col>
                 <ion-col>
                   <div style="text-align: right;">
-                    <ion-chip class="{{checkLimit(b)}}"> ${{getAmt(b.spent)}} </ion-chip>
+                    <ion-chip class="{{checkLimit(b)}} white"> ${{getAmt(b.spent)}} </ion-chip>
                   </div>
                 </ion-col>
                 <ion-col>
                   <div style="text-align: right;">
-                    <ion-chip class="{{checkLimit(b)}}"> ${{getAmt(b.limit)}} </ion-chip>
+                    <ion-chip class="{{checkLimit(b)}} white"> ${{getAmt(b.limit)}} </ion-chip>
                   </div>
                 </ion-col>
               </ion-row>
@@ -250,11 +250,11 @@
 
           <div *ngIf="b.open">
             <ion-item color="clear" lines="none">
-              <ion-chip (click)="editLimit(b, i)"> Change Limit <ion-icon name="add"></ion-icon> </ion-chip>
-              <ion-chip (click)="addTransaction(b)"> Add Transaction <ion-icon name="add"></ion-icon> </ion-chip>
+              <ion-chip (click)="editLimit(b, i)" color="success"> Edit Limit <ion-icon name="create-outline"></ion-icon> </ion-chip>
+              <ion-chip (click)="addTransaction(b)" color="success"> Add Transaction <ion-icon name="add"></ion-icon> </ion-chip>
             </ion-item>
 
-            <div style="height: 100px; overflow: scroll">
+            <div class="limit-info">
               <div *ngFor="let t of b.transactions, let i = index">
                 <ion-item *ngIf="thisMonth(t)" color="clear" lines="none">
                   <!-- <ion-label><ion-badge color="success">{{b.transactions.length - i}}</ion-badge>

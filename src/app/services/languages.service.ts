@@ -7,11 +7,12 @@ import { AlertController, ToastController } from '@ionic/angular';
 export class LanguagesService {
 
   constructor(public alertController: AlertController, public toastCtrl: ToastController) {
-
   }
 
+  // Current language
   myLanguage = {code: 'en', index: 0};
 
+  // Available languages
   languageList = [
     {i: 0, code: 'en', name: "English"},
     {i: 1, code: 'ko', name: "한국어"},
@@ -20,9 +21,16 @@ export class LanguagesService {
     // {i: 4, code: 'ja', name: "日本語"},
   ]
 
+  // Keywords translated
   translations = [
+    /* English */
     {
-      i: 0,
+      profile: "Profile",
+      age: "Age",
+      bday: "Birthday",
+      hello: "Hello",
+      name: "Name",
+      today: "Today",
       tab1: "Shopping List",
       // tab1Content: {
       //   all: "All",
@@ -39,56 +47,51 @@ export class LanguagesService {
       tab2: "Monthly Budget",
       tab3: "Calendar",
       tab4: "Timetable",
-      // tab4: "Calculator",
-      profile: "Profile",
-      age: "Age",
-      bday: "Birthday",
+      // tab5: "Calculator",
     },
+
+    /* Korean */
     {
-      i: 1,
+      profile: "프로필", // "내 프로필"
+      age: "나이",
+      bday: "생일",
+      hello: "안녕하세요",
+      name: "이름",
+      today: "오늘",
+      // country: "나라"
       tab1: "쇼핑리스트",
       tab2: "월간 예산",
       tab3: "달력",
       tab4: "시간표",
-      // tab4: "계산기",
-      profile: "프로필", // "내 프로필"
-      age: "나이",
-      bday: "생일",
-      // addr: "주소" // country: "나라"
+      // tab5: "계산기",
     },
-    //https://www.google.com/search?q=german+form+age&tbm=isch&ved=2ahUKEwjmo_LPvNj4AhUCO98KHZX1B3IQ2-cCegQIABAA&oq=german+form+age&gs_lcp=CgNpbWcQAzoECCMQJzoFCAAQgAQ6BAgAEB46BggAEB4QCFDzCFj7FmDKGWgAcAB4AIABigGIAdoEkgEDMC41mAEAoAEBqgELZ3dzLXdpei1pbWfAAQE&sclient=img&ei=ilG_Yua2MoL2_AaV65-QBw#imgrc=vWnJx-Nkzj9Y9M
+
+    /* German */
     {
-      i: 2,
+      profile: "Profil",
+      age: "Alter",
+      bday: "Geburtstag",
+      hello: "Hallo",
+      name: "Name",
+      today: "Heute",
       tab1: "Einkaufsliste",
       tab2: "Monatliches Budget",
       tab3: "Kalendar",
       tab4: "Zeitplan",
-      // tab4: "Taschenrechner",
-      profile: "Profil",
-      age: "Alter",
-      bday: "Geburtstag",
+      // tab5: "Taschenrechner", 
     }
   ]
   
-  changeLanguage(langIndex){
-    var langList = this.languageList;
-    var index = langIndex;
-    // if (langIndex == -1){
-    //   index = this.myLanguage.index;
-    //   if (index == langList.length - 1)
-    //     index = 0;
-    //   else
-    //     index++;
-    // }
-    this.myLanguage.code = langList[index].code;
-    this.myLanguage.index = index;
-
+  /* Update variables which keep track of the application's current language */
+  changeLanguage(langIndex: number){
+    this.myLanguage.code = this.languageList[langIndex].code;
+    this.myLanguage.index = langIndex;
     this.translateDaysOfWeek();
   }
 
-  getLabel(name){
-    var langIndex = this.myLanguage.index;
-    var lang = this.translations[langIndex];
+  /* Return the phrase in the appropriate language */
+  getLabel(name: string){
+    var lang = this.translations[this.myLanguage.index];
     switch(name){
       case "tab1":
         return lang.tab1;
@@ -98,13 +101,18 @@ export class LanguagesService {
         return lang.tab3;
       case "tab4":
         return lang.tab4;
-      
       case "profile":
         return lang.profile;
       case "age":
         return lang.age;
       case "bday":
         return lang.bday;
+      case "hello":
+        return lang.hello;
+      case "name":
+        return lang.name;
+      case "today":
+        return lang.today;
     }
   }
 
@@ -131,19 +139,19 @@ export class LanguagesService {
 
   getLangOptions(){
     var opts = [];
-    var langs;
+    var langs: { name: any; i: number; code: string; };
     var checked = false;
 
     for (var i = 0; i < this.languageList.length; i++){
       langs = this.languageList[i];
       checked = (i == this.myLanguage.index);
-      opts.push({label: langs.name, type: 'radio', value: langs.i, checked: checked})
+      opts.push({label: langs.name, type: 'radio', value: i, checked: checked})
     }
 
     return opts;
   }
 
-  async presentAlert(alertInfo){
+  async presentAlert(alertInfo: { header: any; subHeader: any; buttons: any; inputs: any; }){
     const alert = await this.alertController.create({
       header: alertInfo.header,
       subHeader: alertInfo.subHeader,
@@ -155,7 +163,7 @@ export class LanguagesService {
     await alert.present();
   }
   
-  async presentToast(message, duration, icon, position, color) {
+  async presentToast(message: string, duration: number, icon: string, position: "top" | "middle" | "bottom", color: any) {
     const toast = await this.toastCtrl.create({
       message: message,
       duration: duration,
@@ -176,8 +184,8 @@ export class LanguagesService {
     toast.present();
   }
 
-  displayProfileToast(type){
-    let message, icon, position;
+  displayProfileToast(type: string){
+    let message: string, icon: string, position: "top" | "middle" | "bottom";
     switch(type){
       case 'delete':
         message = "Profile deleted";
@@ -193,8 +201,8 @@ export class LanguagesService {
     this.presentToast(message, 2000, icon, position, "light");
   }
 
-  displayTab1Toast(type){
-    let message, icon, position;
+  displayTab1Toast(type: string){
+    let message: string, icon: string, position: "top" | "middle" | "bottom";
     switch(type){
       case 'checkOut':
         message = "All checked items were removed";
@@ -215,8 +223,8 @@ export class LanguagesService {
     this.presentToast(message, 2000, icon, position, "light");
   }
 
-  displayTab2Toast(type){
-    let message, icon;
+  displayTab2Toast(type: string){
+    let message: string, icon: string;
     switch(type){
       case 'clear':
         message = "All transactions cleared";
@@ -226,8 +234,8 @@ export class LanguagesService {
     this.presentToast(message, 2000, icon, "middle", "light");
   }
 
-  displayTab3Toast(type, extra = undefined){
-    let message, icon;
+  displayTab3Toast(type: string, extra = undefined){
+    let message: string, icon: string;
     switch(type){
       case 'clear':
         message = "All events cleared";
@@ -242,9 +250,9 @@ export class LanguagesService {
     this.presentToast(message, 2000, icon, "top", "light");
   }
 
-  displayTab4Toast(type){
-    let message, icon;
-    let pos = "middle";
+  displayTab4Toast(type: string){
+    let message: string, icon: string;
+    let position: "top" | "middle" | "bottom" = "middle";
     switch(type){
       case 'edit':
         message = "Entering Edit mode";
@@ -269,10 +277,10 @@ export class LanguagesService {
       case 'invalidTime':
         message = "Enter all times before saving";
         icon = "alarm";
-        pos = "top";
+        position = "top";
         break;
     }
-    this.presentToast(message, 2000, icon, pos, "light");
+    this.presentToast(message, 2000, icon, position, "light");
   }
 
   days = [
@@ -291,7 +299,9 @@ export class LanguagesService {
     date.setDate(date.getDate() + 1);
     let count = 0;
     let daynum = 0;
-    let daynameFull, daynameShort = "";
+    let daynameFull: string = "";
+    let daynameShort: string = "";
+    
     while (count < 7){
       daynum = date.getDay();
       daynameFull = date.toLocaleDateString(lang, {weekday: "long"});
@@ -299,8 +309,10 @@ export class LanguagesService {
       this.days[daynum].val = daynameFull;
       this.days[daynum].short = daynameShort;
       date.setDate(date.getDate() + 1);
-      // console.log(date);
       count++;
     }
   }
 }
+
+
+//https://www.google.com/search?q=german+form+age&tbm=isch&ved=2ahUKEwjmo_LPvNj4AhUCO98KHZX1B3IQ2-cCegQIABAA&oq=german+form+age&gs_lcp=CgNpbWcQAzoECCMQJzoFCAAQgAQ6BAgAEB46BggAEB4QCFDzCFj7FmDKGWgAcAB4AIABigGIAdoEkgEDMC41mAEAoAEBqgELZ3dzLXdpei1pbWfAAQE&sclient=img&ei=ilG_Yua2MoL2_AaV65-QBw#imgrc=vWnJx-Nkzj9Y9M

@@ -26,7 +26,9 @@
   </ion-header>
 
   <div style="height: 10px;"></div>
-  <div align="center" class="fadeIn">
+
+  <!-- <div align="center" class="fadeIn" style="position: fixed;"> -->
+    <div align="center" class="fadeIn">
     <!-- <ion-chip (click)="show = 'All'" color="{{determineSelected('All')}}">All</ion-chip> -->
     <ion-chip *ngFor="let label of categories; let i = index" (click)="selectList(i)" color="{{determineSelected(i)}}">{{label.name}}</ion-chip>
     <ion-chip (click)="addList()">New List<ion-icon name="add"></ion-icon></ion-chip>

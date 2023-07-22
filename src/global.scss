@@ -62,7 +62,40 @@ ion-picker.category-picker{
     button.alert-radio-button.alertInput.alert-radio-inner{
         color: rgb(227, 63, 145);
     }
-    
+    button.delete-button{
+        background-color: red;
+        color: white;
+        margin: 0;
+        width: 75px;
+    }    
+    button.save-button{
+        background-color: green;
+        color: white;
+        margin: 0;
+        width: 75px;
+    }
+    div.alert-button-group{
+        display: flex;
+        justify-content: space-around;
+    }
+    .alert-button-inner.sc-ion-alert-md{
+        -ms-flex-pack: center;
+        justify-content: center;
+    }
+    .select-button .alert-button-inner.sc-ion-alert-md{
+        -ms-flex-pack: end;
+        justify-content: flex-end;
+        color: rgb(227, 63, 145);
+    }
+    .choice-button {
+        color: white;
+        background-color: rgb(227, 63, 145);
+        margin: 2px;
+    }
+}
+
+div::-webkit-scrollbar{
+    display: none;
 }
 
 // button.alert-button.alertButton {
@@ -71,8 +104,9 @@ ion-picker.category-picker{
 // }
 
 .alert-title.sc-ion-alert-md {
-
-    color: rgb(227, 63, 145);
+    // color: rgb(227, 63, 145);
+    // color: green;
+    color: black;
 }
 
 [aria-checked=true].sc-ion-alert-md{

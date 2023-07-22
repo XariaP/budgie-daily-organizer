@@ -87,25 +87,25 @@ export class Tab4Page implements OnInit {
   }
 
   changeDay(){
-    let header = "Which day's timetable would you like to view?";
+    let header = "Which day would you like to view?";
     let subHeader = "";
     let buttons = [
       // {text: 'Cancel', role: 'cancel'},
       {
         text: 'Select',
-        cssClass: "alertButton",
+        cssClass: "select-button",
         handler: choice => {
         this.currentDay = choice;
       }},
       {
-        text: 'Today',
-        cssClass: "alertButton",
+        text: this.language.getLabel("today"),
+        cssClass: "choice-button",
         handler: () => {
         this.currentDay = this.today.getDay();
       }},
       {
         text: 'View All Routines',
-        cssClass: 'alertButton',
+        cssClass: 'choice-button',
         handler:() => {
           this.currentDay = -1;
       }},
@@ -118,7 +118,7 @@ export class Tab4Page implements OnInit {
     //   checked: (this.currentDay == -1),
     //   cssClass: "alertInput",
     // }
-  ]
+    ]
 
     for (let i = 0; i < this.days.length; i++){
       inputs.push({
@@ -435,7 +435,8 @@ export class Tab4Page implements OnInit {
       {
         text: 'Cancel',
         role: 'cancel',
-        cssClass: 'alert-button-cancel'
+        // cssClass: 'alert-button-cancel'
+        cssClass: 'save-button'
       },
       {
         text:'OK',
@@ -443,7 +444,8 @@ export class Tab4Page implements OnInit {
           this.routines = [];
           this.saveData();
         },
-        cssClass: 'alert-button-confirm'
+        // cssClass: 'alert-button-confirm'
+        cssClass: 'delete-button'
       }
     ]
     var inputs = [];

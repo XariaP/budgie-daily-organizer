@@ -228,7 +228,8 @@ export class Tab2Page {
         text: 'Delete',
         handler: () => {
           this.limits.splice(ID, 1);
-        }
+        },
+        cssClass: "delete-button",
       },
       {
         text: 'Save',
@@ -236,7 +237,8 @@ export class Tab2Page {
           limit.purpose = item.purpose;
           limit.limit = item.limit;
           this.saveData();
-        }
+        },
+        cssClass: "save-button",
       }
     ];
     var inputs = [

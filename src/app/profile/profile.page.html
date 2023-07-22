@@ -115,7 +115,7 @@
 
         <div *ngIf="modalData == 'profileEdit'">
           <ion-item>
-            <ion-label position="fixed" color="lilac" clearInput>Name</ion-label>
+            <ion-label position="fixed" color="lilac" clearInput>{{getLabel("name")}}</ion-label>
             <ion-input [(ngModel)]="userName"></ion-input>
           </ion-item>
           <ion-item lines="none" (click)="showDatePicker = !showDatePicker">

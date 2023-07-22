@@ -192,7 +192,8 @@ export class ProfilePage implements OnInit {
   getGreeting(){
     let today = new Date();
     let bday = new Date(this.userBDay);
-    let greeting = "Hello";
+    // let greeting = "Hello";
+    let greeting = this.getLabel('hello');
     if (today.getMonth() == bday.getMonth() && today.getDate() == bday.getDate())
       greeting = "Happy Birthday";
     return greeting;
