@@ -13,6 +13,7 @@ export class UserService {
     this.init();
   }
 
+  // Initialize with saved user information
   async init() {
    const storage = await this.storage.create();
     this._storage = storage;
@@ -32,8 +33,10 @@ export class UserService {
     return this._storage?.get(key);
   }
 
+  // Displays menu when active
   showMenu: boolean = false;
 
+  // Profile photo paths
   path: string = "../../assets/";
 
   photos = [
@@ -42,18 +45,17 @@ export class UserService {
     "winter-1.jpg",
     "flower-1.jpg", "flower-2.jpg",
     "food-1.jpg",
-
-    "mafumafu-1.png", "mafumafu-2.png", "mafumafu-3.png",
     "dessert-7.jpg",
   ]
   
-  currentAvatarIndex = -1;
+  currentAvatarIndex: number = -1;
 
   avatarPic: string = "";
 
+  // General user information
   userName: string = "User";
-  userBDay =  "";
-  userJobID = 0;
+  userBDay: any =  "";
+  userJobID: number = 0;
 
   tab1shopping = {
     myItems: [],
@@ -79,6 +81,7 @@ export class UserService {
 
   tab4routines = [];
   
+  // Delete all user information
   resetUser(){
     this.currentAvatarIndex = -1;
     
@@ -121,11 +124,7 @@ export class UserService {
     this.saveTab4Info();
   }
 
-
-  getAvatar(){
-    return this.avatarPic;
-  }
-
+  // Update user information
   changeAvatar(){
     this.currentAvatarIndex++;
     if (this.currentAvatarIndex == this.photos.length){
@@ -179,13 +178,13 @@ export class UserService {
   date: Date = new Date();
 
   // Convert date to string given format
-  getDateString(date, options){
+  getDateString(date: Date, options: any){
     var lang = this.language.myLanguage.code;
     return date.toLocaleString(lang, options);
   }
 
-  getDate(opt){
-    var options;
+  getDate(opt: string){
+    var options: { weekday?: string; month?: string; day?: string; year?: string; };
     switch(opt){
       case 'weekday':
         options = {weekday: 'long'};
@@ -208,7 +207,6 @@ export class UserService {
   async retrieveUser(){
     let data = await this.get('userInfo');
     if (data != undefined){
-      // console.log(data);
       this.userName = data.name;
       this.userBDay = data.bday;
       this.currentAvatarIndex = data.avatar;
@@ -223,6 +221,7 @@ export class UserService {
       this.avatarPic = this.path + this.photos[this.currentAvatarIndex];
   }
 
+  // Save information
   saveUser(){
     this.set('userInfo', {
       avatar: this.currentAvatarIndex,
@@ -246,6 +245,11 @@ export class UserService {
 
   saveTab4Info(){
     this.set('routines', this.tab4routines);
+  }
+  
+  // Get user information
+  getAvatar(){
+    return this.avatarPic;
   }
 
   async getTab1Info(){

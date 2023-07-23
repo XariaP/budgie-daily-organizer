@@ -9,7 +9,7 @@ export class LanguagesService {
   constructor(public alertController: AlertController, public toastCtrl: ToastController) {
   }
 
-  // Current language
+  // The current language of the application
   myLanguage = {code: 'en', index: 0};
 
   // Available languages
@@ -21,7 +21,7 @@ export class LanguagesService {
     // {i: 4, code: 'ja', name: "日本語"},
   ]
 
-  // Keywords translated
+  // Vocabulary lists for each language
   translations = [
     /* English */
     {
@@ -47,23 +47,23 @@ export class LanguagesService {
       tab2: "Monthly Budget",
       tab3: "Calendar",
       tab4: "Timetable",
-      // tab5: "Calculator",
+      tab5: "Calculator",
     },
 
     /* Korean */
     {
-      profile: "프로필", // "내 프로필"
+      profile: "프로필",      // "내 프로필"
       age: "나이",
       bday: "생일",
       hello: "안녕하세요",
       name: "이름",
       today: "오늘",
-      // country: "나라"
+      country: "나라",
       tab1: "쇼핑리스트",
       tab2: "월간 예산",
       tab3: "달력",
       tab4: "시간표",
-      // tab5: "계산기",
+      tab5: "계산기",
     },
 
     /* German */
@@ -78,18 +78,18 @@ export class LanguagesService {
       tab2: "Monatliches Budget",
       tab3: "Kalendar",
       tab4: "Zeitplan",
-      // tab5: "Taschenrechner", 
+      tab5: "Taschenrechner", 
     }
   ]
   
-  /* Update variables which keep track of the application's current language */
+  /* Updates variables which keep track of the application's current language */
   changeLanguage(langIndex: number){
     this.myLanguage.code = this.languageList[langIndex].code;
     this.myLanguage.index = langIndex;
     this.translateDaysOfWeek();
   }
 
-  /* Return the phrase in the appropriate language */
+  /* Returns the phrase in the appropriate language */
   getLabel(name: string){
     var lang = this.translations[this.myLanguage.index];
     switch(name){
@@ -116,6 +116,7 @@ export class LanguagesService {
     }
   }
 
+  // Shows pop up alert for language selection
   async presentLanguageOptionsAlert() {
     const alert = await this.alertController.create({
       header: 'Select a language',
@@ -137,6 +138,7 @@ export class LanguagesService {
     await alert.present();
   }
 
+  // Returns language options for the language selection alert
   getLangOptions(){
     var opts = [];
     var langs: { name: any; i: number; code: string; };
@@ -151,6 +153,8 @@ export class LanguagesService {
     return opts;
   }
 
+
+  // Displays generic alert
   async presentAlert(alertInfo: { header: any; subHeader: any; buttons: any; inputs: any; }){
     const alert = await this.alertController.create({
       header: alertInfo.header,
@@ -163,6 +167,7 @@ export class LanguagesService {
     await alert.present();
   }
   
+  // Shows temporary toast notification
   async presentToast(message: string, duration: number, icon: string, position: "top" | "middle" | "bottom", color: any) {
     const toast = await this.toastCtrl.create({
       message: message,
@@ -184,6 +189,7 @@ export class LanguagesService {
     toast.present();
   }
 
+  // Shows temporary toast notification for profile
   displayProfileToast(type: string){
     let message: string, icon: string, position: "top" | "middle" | "bottom";
     switch(type){
@@ -201,6 +207,7 @@ export class LanguagesService {
     this.presentToast(message, 2000, icon, position, "light");
   }
 
+  // Shows toast for shopping list
   displayTab1Toast(type: string){
     let message: string, icon: string, position: "top" | "middle" | "bottom";
     switch(type){
