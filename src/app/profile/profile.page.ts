@@ -160,7 +160,7 @@ export class ProfilePage implements OnInit {
   }
 
   getUserName(){
-    console.log("ji", this.user.userName);
+    // console.log("ji", this.user.userName);
     return this.userName;
   }
 
@@ -242,6 +242,6 @@ export class ProfilePage implements OnInit {
     }
   }
   getJob(){
-    return this.jobs[this.jobID];
+    return this.language.getLabel(this.jobs[this.jobID]);
   }
 }
