@@ -141,7 +141,7 @@ export class UserService {
     this.userName = name;
   }
 
-  setBDay(date: Date){
+  setBDay(date: Date | string){
     this.userBDay = date;
   }
 
