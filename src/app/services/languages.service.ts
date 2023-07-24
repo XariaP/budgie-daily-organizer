@@ -21,65 +21,78 @@ export class LanguagesService {
     // {i: 4, code: 'ja', name: "日本語"},
   ]
 
+  en_trans = new Map<string, string>([
+      ["profile", "Profile"],
+      ["age", "Age"],
+      ["bday", "Birthday"],
+      ["hello", "Hello"],
+      ["name", "Name"],
+      ["today", "Today"],
+      ["tab1", "Shopping List"],
+      ["tab2", "Monthly Budget"],
+      ["tab3", "Calendar"],
+      ["tab4", "Timetable"],
+      ["tab5", "Calculator"],
+      ["Occupation", "Occupation"],
+      ["University Student", "University Student"],
+      ["Highschool Student", "Highschool Student"],
+      ["Primary school student", "Primary School Student"],
+      ["Teacher", "Teacher"],
+      ["Software Engineer", "Software Engineer"],
+      ["Unknown", "Unknown"],
+  ]);
+
+  ko_trans = new Map<string, string>([
+    ["profile", "프로필"],
+    ["age", "나이"],
+    ["bday", "생일"],
+    ["hello", "안녕하세요"],
+    ["name", "이름"],
+    ["today", "오늘"],
+    ["tab1", "쇼핑리스트"],
+    ["tab2", "월간 예산"],
+    ["tab3", "달력"],
+    ["tab4", "시간표"],
+    ["tab5", "계산기"],
+    ["Occupation", "일"],
+    ["University Student", "대학생"],
+    ["Highschool Student", "고등학생"],
+    ["Primary school student", "중학생"],
+    ["Teacher", "선생님"],
+    ["Software Engineer", "소프트웨어 엔지니어"],
+    ["Unknown", "???"],
+    ["country", "나라"],
+  ]);
+
+  de_trans = new Map<string, string>([
+    ["profile", "Profil"],
+    ["age", "Alter"],
+    ["bday", "Geburtstag"],
+    ["hello", "Hallo"],
+    ["name", "Name"],
+    ["today", "Heute"],
+    ["tab1", "Einkaufsliste"],
+    ["tab2", "Monatliches Budget"],
+    ["tab3", "Kalendar"],
+    ["tab4", "Zeitplan"],
+    ["tab5", "Taschenrechner"],
+    ["Occupation", "Arbeit"],
+    ["University Student", "Student"],
+    ["Highschool Student", "Highschool Student"],
+    ["Primary school student", "Primary School Student"],
+    ["Teacher", "Lehrer"],
+    ["Software Engineer", "Software Engineer"],
+    ["Unknown", "Unknown"],
+  ]);
+
   // Vocabulary lists for each language
   translations = [
     /* English */
-    {
-      profile: "Profile",
-      age: "Age",
-      bday: "Birthday",
-      hello: "Hello",
-      name: "Name",
-      today: "Today",
-      tab1: "Shopping List",
-      // tab1Content: {
-      //   all: "All",
-      //   newList: "New List",
-      //   listInfo: "List Information",
-      //   itemName: "Item Name",
-      //   newItem: "New Item",
-      //   items: "Item(s)",
-      //   name: "Name",
-      //   delete: "Delete",
-      //   save: "Save",
-      //   list: "List",
-      // },
-      tab2: "Monthly Budget",
-      tab3: "Calendar",
-      tab4: "Timetable",
-      tab5: "Calculator",
-    },
-
+    this.en_trans,
     /* Korean */
-    {
-      profile: "프로필",      // "내 프로필"
-      age: "나이",
-      bday: "생일",
-      hello: "안녕하세요",
-      name: "이름",
-      today: "오늘",
-      country: "나라",
-      tab1: "쇼핑리스트",
-      tab2: "월간 예산",
-      tab3: "달력",
-      tab4: "시간표",
-      tab5: "계산기",
-    },
-
+    this.ko_trans,
     /* German */
-    {
-      profile: "Profil",
-      age: "Alter",
-      bday: "Geburtstag",
-      hello: "Hallo",
-      name: "Name",
-      today: "Heute",
-      tab1: "Einkaufsliste",
-      tab2: "Monatliches Budget",
-      tab3: "Kalendar",
-      tab4: "Zeitplan",
-      tab5: "Taschenrechner", 
-    }
+    this.de_trans,
   ]
   
   /* Updates variables which keep track of the application's current language */
@@ -90,30 +103,9 @@ export class LanguagesService {
   }
 
   /* Returns the phrase in the appropriate language */
-  getLabel(name: string){
+  getLabel(key: string){
     var lang = this.translations[this.myLanguage.index];
-    switch(name){
-      case "tab1":
-        return lang.tab1;
-      case "tab2":
-        return lang.tab2;
-      case "tab3":
-        return lang.tab3;
-      case "tab4":
-        return lang.tab4;
-      case "profile":
-        return lang.profile;
-      case "age":
-        return lang.age;
-      case "bday":
-        return lang.bday;
-      case "hello":
-        return lang.hello;
-      case "name":
-        return lang.name;
-      case "today":
-        return lang.today;
-    }
+    return lang.get(key);
   }
 
   // Shows pop up alert for language selection
@@ -230,6 +222,7 @@ export class LanguagesService {
     this.presentToast(message, 2000, icon, position, "light");
   }
 
+  // Shows toast for budget section
   displayTab2Toast(type: string){
     let message: string, icon: string;
     switch(type){
@@ -241,6 +234,7 @@ export class LanguagesService {
     this.presentToast(message, 2000, icon, "middle", "light");
   }
 
+  // Shows toast for event calendar
   displayTab3Toast(type: string, extra = undefined){
     let message: string, icon: string;
     switch(type){
@@ -257,6 +251,7 @@ export class LanguagesService {
     this.presentToast(message, 2000, icon, "top", "light");
   }
 
+  // Shows toast for timetables
   displayTab4Toast(type: string){
     let message: string, icon: string;
     let position: "top" | "middle" | "bottom" = "middle";
@@ -320,6 +315,21 @@ export class LanguagesService {
     }
   }
 }
+
+
+  // tab1Content: {
+      //   all: "All",
+      //   newList: "New List",
+      //   listInfo: "List Information",
+      //   itemName: "Item Name",
+      //   newItem: "New Item",
+      //   items: "Item(s)",
+      //   name: "Name",
+      //   delete: "Delete",
+      //   save: "Save",
+      //   list: "List",
+      // },
+
 
 
 //https://www.google.com/search?q=german+form+age&tbm=isch&ved=2ahUKEwjmo_LPvNj4AhUCO98KHZX1B3IQ2-cCegQIABAA&oq=german+form+age&gs_lcp=CgNpbWcQAzoECCMQJzoFCAAQgAQ6BAgAEB46BggAEB4QCFDzCFj7FmDKGWgAcAB4AIABigGIAdoEkgEDMC41mAEAoAEBqgELZ3dzLXdpei1pbWfAAQE&sclient=img&ei=ilG_Yua2MoL2_AaV65-QBw#imgrc=vWnJx-Nkzj9Y9M
