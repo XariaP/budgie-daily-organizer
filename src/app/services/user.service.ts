@@ -48,8 +48,10 @@ export class UserService {
     "dessert-7.jpg",
   ]
   
+  // Stores index of current profile photo
   currentAvatarIndex: number = -1;
 
+  // Image path to user's profile photo
   avatarPic: string = "";
 
   // General user information
@@ -57,6 +59,7 @@ export class UserService {
   userBDay: any =  "";
   userJobID: number = 0;
 
+  // Stores relevant data for the shopping list tab
   tab1shopping = {
     myItems: [],
     categories: [
@@ -64,6 +67,7 @@ export class UserService {
     ],
   };
   
+  // Stores relevant data for the budget tab
   tab2budget = {
     transactions: [],
     limits: [],
@@ -72,6 +76,7 @@ export class UserService {
     totalSpent: 0.00,
   };
   
+  // Stores relevant data for the event calendar tab
   tab3events = {
     events: [],
     dates: [],
@@ -79,18 +84,15 @@ export class UserService {
     emptyEventSlots: []
   };
 
+  // Stores relevant data for the routine schedule tab
   tab4routines = [];
   
-  // Delete all user information
+  // Clear all user information
   resetUser(){
     this.currentAvatarIndex = -1;
-    
     this.avatarPic = "";
-
     this.userName = "User";
-
     this.userBDay =  "";
-
     this.userJobID = 0;
 
     this.tab1shopping = {
@@ -135,35 +137,35 @@ export class UserService {
       this.avatarPic = this.path + this.photos[this.currentAvatarIndex];
   }
 
-  setName(name){
+  setName(name: string){
     this.userName = name;
   }
 
-  setBDay(date){
+  setBDay(date: Date){
     this.userBDay = date;
   }
 
-  setJobID(ID){
+  setJobID(ID: number){
     this.userJobID = ID;
   }
 
-  setTab1Info(info){
+  setTab1Info(info: { myItems: any[]; categories: { name: string; quantity: number; }[] | { name: string; quantity: number; }[]; }){
     this.tab1shopping = info;
   }
 
-  setTab2Info(info){
+  setTab2Info(info: any){
     this.tab2budget = info;
   }
 
-  setTab3Info(info){
+  setTab3Info(info: { events: any[] | { what: string; who: string[]; where: string; time: string; date: Date; active: boolean; }[]; dates: any[] | { date: Date; eventIDs: any[]; active: boolean; }[]; dateMap: Map<any, any>; emptyEventSlots: any[] | number[]; }){
     this.tab3events = info;
   }
 
-  setTab4Info(info){
+  setTab4Info(info: any[]){
     this.tab4routines = info;
   }
 
-  async presentAlert(alertInfo){
+  async presentAlert(alertInfo: { header: any; subHeader: any; buttons: any; inputs: any; }){
     const alert = await this.alertController.create({
       header: alertInfo.header,
       subHeader: alertInfo.subHeader,
