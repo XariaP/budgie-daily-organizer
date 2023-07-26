@@ -21,7 +21,7 @@ export class LanguagesService {
     // {i: 4, code: 'ja', name: "日本語"},
   ]
 
-  en_trans = new Map<string, string>([
+  en_lang = new Map<string, string>([
       ["profile", "Profile"],
       ["age", "Age"],
       ["bday", "Birthday"],
@@ -42,7 +42,7 @@ export class LanguagesService {
       ["Unknown", "Unknown"],
   ]);
 
-  ko_trans = new Map<string, string>([
+  ko_lang = new Map<string, string>([
     ["profile", "프로필"],
     ["age", "나이"],
     ["bday", "생일"],
@@ -64,7 +64,7 @@ export class LanguagesService {
     ["country", "나라"],
   ]);
 
-  de_trans = new Map<string, string>([
+  de_lang = new Map<string, string>([
     ["profile", "Profil"],
     ["age", "Alter"],
     ["bday", "Geburtstag"],
@@ -88,11 +88,11 @@ export class LanguagesService {
   // Vocabulary lists for each language
   translations = [
     /* English */
-    this.en_trans,
+    this.en_lang,
     /* Korean */
-    this.ko_trans,
+    this.ko_lang,
     /* German */
-    this.de_trans,
+    this.de_lang,
   ]
   
   /* Updates variables which keep track of the application's current language */
